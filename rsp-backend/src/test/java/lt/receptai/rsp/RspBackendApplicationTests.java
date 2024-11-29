@@ -1,10 +1,10 @@
-package Recipe_sharing_platform.demo;
+package lt.receptai.rsp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class RspBackendApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,13 +1,13 @@
-package Recipe_sharing_platform.demo;
+package lt.receptai.rsp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication {
+public class RspBackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(RspBackendApplication.class, args);
 	}
 
 }
