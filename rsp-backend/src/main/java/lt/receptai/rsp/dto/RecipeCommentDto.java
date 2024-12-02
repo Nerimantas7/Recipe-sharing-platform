@@ -1,0 +1,14 @@
+package lt.receptai.rsp.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class RecipeCommentDto {
+
+    private Long id;
+    private String recipeComment;
+}
