@@ -3,12 +3,15 @@ package lt.receptai.rsp.service.impl;
 import lombok.AllArgsConstructor;
 import lt.receptai.rsp.dto.RecipeDto;
 import lt.receptai.rsp.entity.Recipe;
+import lt.receptai.rsp.exception.ResourceNotFoundException;
 import lt.receptai.rsp.repository.RecipeRepository;
 import lt.receptai.rsp.service.RecipeService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -37,22 +40,38 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public RecipeDto getRecipeById(Long recipeId) {
 
-        Recipe recipe = recipeRepository.findById(recipeId).get();
+        Recipe recipe = recipeRepository.findById(recipeId).
+                orElseThrow(()-> new ResourceNotFoundException("Recipe not found with given id: " + recipeId));
         return modelMapper.map(recipe, RecipeDto.class);
     }
 
     @Override
     public List<RecipeDto> getAllRecipes() {
-        return List.of();
+
+        List <Recipe> recipes = recipeRepository.findAll();
+
+        return recipes.stream().map((recipe)->modelMapper.map(recipe, RecipeDto.class))
+        .collect(Collectors.toList());
     }
 
     @Override
-    public RecipeDto updateRecipe(Long recipeId, RecipeDto updatedRecipe) {
-        return null;
+    public RecipeDto updateRecipe(RecipeDto recipeDto, Long recipeId) {
+
+        Recipe recipe = recipeRepository.findById(recipeId).
+                orElseThrow(()-> new ResourceNotFoundException("Recipe not found with given id: " + recipeId));
+        recipe.setRecipeName(recipeDto.getRecipeName());
+        recipe.setRecipeIngredients(recipeDto.getRecipeIngredients());
+        recipe.setRecipeSteps(recipeDto.getRecipeSteps());
+        recipe.setRecipeImage(recipeDto.getRecipeImage());
+
+        Recipe updatedRecipe = recipeRepository.save(recipe);
+        return modelMapper.map(updatedRecipe, RecipeDto.class);
     }
 
     @Override
     public void deleteRecipe(Long recipeId) {
-
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(()-> new ResourceNotFoundException("Recipe not found with given id: " + recipeId));
+        recipeRepository.deleteById(recipeId);
     }
 }

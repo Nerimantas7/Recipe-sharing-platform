@@ -13,7 +13,7 @@ public interface RecipeCategoryService {
 
     List<RecipeCategoryDto> getAllCategories();
 
-    RecipeCategoryDto updateCategory(Long categoryId, RecipeCategoryDto updatedCategory);
+    RecipeCategoryDto updateCategory(RecipeCategoryDto categoryDto, Long categoryId);
 
     void  deleteCategory(Long categoryId);
 }

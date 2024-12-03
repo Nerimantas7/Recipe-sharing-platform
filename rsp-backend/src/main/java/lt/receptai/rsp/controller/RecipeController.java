@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@CrossOrigin("*")
 @RestController
 @RequestMapping("api/recipes")
 @AllArgsConstructor
@@ -31,4 +34,25 @@ public class RecipeController {
         return new ResponseEntity<>(recipeDto, HttpStatus.OK);
     }
 
+    // Build Get All Recipes REST API
+    @GetMapping
+    public ResponseEntity<List<RecipeDto>> getAllRecipes(){
+
+        List<RecipeDto> recipes = recipeService.getAllRecipes();
+        return ResponseEntity.ok(recipes);
+    }
+
+    // Build Update Recipe REST API
+    @PutMapping("{id}")
+    public ResponseEntity<RecipeDto> updateRecipe(@RequestBody RecipeDto recipeDto, @PathVariable("id") Long recipeId){
+        RecipeDto updatedRecipe = recipeService.updateRecipe(recipeDto, recipeId);
+        return ResponseEntity.ok(updatedRecipe);
+    }
+
+    //Build Delete Recipe REST API
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteRecipe(@PathVariable("id") Long recipeId){
+        recipeService.deleteRecipe(recipeId);
+        return ResponseEntity.ok("Recipe deleted successfully!");
+    }
 }

@@ -12,7 +12,7 @@ public interface RecipeCommentService {
 
     List<RecipeCommentDto> getAllComments();
 
-    RecipeCommentDto updateComment(Long commentId, RecipeCommentDto updatedComment);
+    RecipeCommentDto updateComment(RecipeCommentDto commentDto, Long commentId);
 
     void  deleteComment(Long commentId);
 }
