@@ -3,7 +3,9 @@ package lt.receptai.rsp.service.impl;
 import lombok.AllArgsConstructor;
 import lt.receptai.rsp.dto.RecipeDto;
 import lt.receptai.rsp.entity.Recipe;
+import lt.receptai.rsp.entity.RecipeCategory;
 import lt.receptai.rsp.exception.ResourceNotFoundException;
+import lt.receptai.rsp.repository.RecipeCategoryRepository;
 import lt.receptai.rsp.repository.RecipeRepository;
 import lt.receptai.rsp.service.RecipeService;
 import org.modelmapper.ModelMapper;
@@ -19,6 +21,8 @@ public class RecipeServiceImpl implements RecipeService {
 
     private RecipeRepository recipeRepository;
 
+    private RecipeCategoryRepository recipeCategoryRepository;
+
     private ModelMapper modelMapper;
 
     @Override
@@ -27,14 +31,16 @@ public class RecipeServiceImpl implements RecipeService {
         //convert RecipeDto into Recipe Jpa entity
         Recipe recipe =modelMapper.map(recipeDto, Recipe.class);
 
+        RecipeCategory category = recipeCategoryRepository.findById(recipeDto.getCategoryId())
+                .orElseThrow(()-> new ResourceNotFoundException("Category is not exist with given id: " + recipeDto.getCategoryId()));
+        recipe.setRecipeCategory(category);
+
         //Recipe Jpa entity
         Recipe savedRecipe = recipeRepository.save(recipe);
 
         //Convert saved Recipe Jpa entity object into RecipeDto entity
 
-        RecipeDto savedRecipeDto = modelMapper.map(savedRecipe, RecipeDto.class);
-
-        return savedRecipeDto;
+        return modelMapper.map(savedRecipe, RecipeDto.class);
     }
 
     @Override
@@ -55,17 +61,21 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public RecipeDto updateRecipe(RecipeDto recipeDto, Long recipeId) {
+    public RecipeDto updateRecipe(RecipeDto updatedRecipe, Long recipeId) {
 
         Recipe recipe = recipeRepository.findById(recipeId).
                 orElseThrow(()-> new ResourceNotFoundException("Recipe not found with given id: " + recipeId));
-        recipe.setRecipeName(recipeDto.getRecipeName());
-        recipe.setRecipeIngredients(recipeDto.getRecipeIngredients());
-        recipe.setRecipeSteps(recipeDto.getRecipeSteps());
-        recipe.setRecipeImage(recipeDto.getRecipeImage());
+        recipe.setRecipeName(updatedRecipe.getRecipeName());
+        recipe.setRecipeIngredients(updatedRecipe.getRecipeIngredients());
+        recipe.setRecipeSteps(updatedRecipe.getRecipeSteps());
+        recipe.setRecipeImage(updatedRecipe.getRecipeImage());
 
-        Recipe updatedRecipe = recipeRepository.save(recipe);
-        return modelMapper.map(updatedRecipe, RecipeDto.class);
+        RecipeCategory category = recipeCategoryRepository.findById(updatedRecipe.getCategoryId())
+                .orElseThrow(()-> new ResourceNotFoundException("Category is not exist with given id: " + updatedRecipe.getCategoryId()));
+        recipe.setRecipeCategory(category);
+
+        Recipe updatedRecipeObj = recipeRepository.save(recipe);
+        return modelMapper.map(updatedRecipeObj, RecipeDto.class);
     }
 
     @Override

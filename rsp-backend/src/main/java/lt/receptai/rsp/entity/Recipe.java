@@ -29,4 +29,14 @@ public class Recipe {
 
     @Column(name="recipe_image")
     private byte[] recipeImage; // Binary data for the image
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private RecipeCategory recipeCategory;
+
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "comment_id")
+//    private RecipeComment recipeComment;
+
+
 }

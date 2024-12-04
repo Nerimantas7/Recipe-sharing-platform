@@ -32,9 +32,8 @@ public class RecipeCommentServiceImpl implements RecipeCommentService {
         RecipeComment savedComment = recipeCommentRepository.save(recipeComment);
 
         //Convert saved Recipe Comment Jpa entity object into Recipe Comment Dto entity
-        RecipeCommentDto savedCommentDto = modelMapper.map(savedComment, RecipeCommentDto.class);
 
-        return savedCommentDto;
+        return modelMapper.map(savedComment, RecipeCommentDto.class);
     }
 
     @Override

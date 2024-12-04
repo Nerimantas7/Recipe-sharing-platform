@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lt.receptai.rsp.entity.RecipeCategory;
 
 @Getter
 @Setter
@@ -15,5 +16,6 @@ public class RecipeDto {
     private String recipeIngredients;
     private String recipeSteps;
     private byte[] recipeImage;
+    private Long categoryId;
 
 }

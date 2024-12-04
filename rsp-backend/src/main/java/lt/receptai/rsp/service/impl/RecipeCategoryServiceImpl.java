@@ -30,9 +30,8 @@ public class RecipeCategoryServiceImpl implements RecipeCategoryService {
         RecipeCategory savedCategory = recipeCategoryRepository.save(recipeCategory);
 
         //Convert saved Recipe Category Jpa entity object into RecipeCategoryDto entity
-        RecipeCategoryDto savedCategoryDto = modelMapper.map(savedCategory, RecipeCategoryDto.class);
 
-        return savedCategoryDto;
+        return modelMapper.map(savedCategory, RecipeCategoryDto.class);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class RecipeCategoryServiceImpl implements RecipeCategoryService {
 
         RecipeCategory category = recipeCategoryRepository.findById(categoryId).
                 orElseThrow(() -> new ResourceNotFoundException("Category not found with given id: " + categoryId));
-        category.setBookCategory(categoryDto.getRecipeCategory());
+        category.setRecipeCategory(categoryDto.getRecipeCategory());
         category.setCategoryDescription(categoryDto.getCategoryDescription());
 
         RecipeCategory updatedCategory = recipeCategoryRepository.save(category);

@@ -20,7 +20,7 @@ public class RecipeCategory {
     private Long id;
 
     @Column(name = "category_name", nullable = false, unique = true)
-    private String bookCategory;
+    private String recipeCategory;
 
     @Column(name = "category_description")
     private String categoryDescription;
