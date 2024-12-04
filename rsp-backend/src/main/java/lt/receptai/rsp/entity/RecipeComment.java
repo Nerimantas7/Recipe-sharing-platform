@@ -16,7 +16,11 @@ public class RecipeComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "recipe_comment")
+    @Column(name = "recipe_comment", nullable = false)
     private String recipeComment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private Recipe recipe; // Reference to the Recipe entity
 
 }

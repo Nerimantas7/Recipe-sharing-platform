@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,12 +33,25 @@ public class Recipe {
     private byte[] recipeImage; // Binary data for the image
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private RecipeCategory recipeCategory;
 
-//    @OneToMany(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "comment_id")
-//    private RecipeComment recipeComment;
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<RecipeComment> recipeComments; // Collection of comments
 
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<RecipeLike> recipeLikes; // Collection of likes/dislikes
+
+    public long getTotalLikes() {
+        return recipeLikes.stream().filter(RecipeLike::getLiked).count();
+    }
+
+    public long getTotalDislikes() {
+        return recipeLikes.stream().filter(like -> !like.getLiked()).count();
+    }
+
+    public boolean hasUserLiked(Long userId) {
+        return recipeLikes.stream().anyMatch(like -> like.getUser().equals(userId) && like.getLiked());
+    }
 
 }
