@@ -15,5 +15,5 @@ public interface RecipeCategoryService {
 
     RecipeCategoryDto updateCategory(RecipeCategoryDto categoryDto, Long categoryId);
 
-    void  deleteCategory(Long categoryId);
+    void deleteCategory(Long categoryId);
 }

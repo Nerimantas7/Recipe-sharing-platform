@@ -55,7 +55,6 @@ public class RecipeServiceImpl implements RecipeService {
     public List<RecipeDto> getAllRecipes() {
 
         List <Recipe> recipes = recipeRepository.findAll();
-
         return recipes.stream().map((recipe)->modelMapper.map(recipe, RecipeDto.class))
         .collect(Collectors.toList());
     }

@@ -6,12 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "recipe_likes")
+@Table(name = "recipe_likes", uniqueConstraints = @UniqueConstraint(columnNames = {"recipe_id", "user_id"}))
 public class RecipeLike {
 
     @Id
@@ -28,4 +30,22 @@ public class RecipeLike {
 
     @Column(name = "liked", nullable = false)
     private Boolean liked; // true for like, false for dislike?
+
+    @Column(name = "created_at", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
 }
