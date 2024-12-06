@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
@@ -21,16 +23,18 @@ public class Recipe {
     private Long id;
 
     @Column(name = "recipe_name", nullable = false)
+    @Size(min = 3, max = 100, message = "Recipe name must be between 3 and 100 characters.")
     private String recipeName;
 
     @Column(name = "recipe_ingredients", nullable = false)
+    @NotEmpty(message = "Recipe ingredients must not be empty.")
     private String recipeIngredients;
 
     @Column(name = "recipe_steps", nullable = false)
     private String recipeSteps;
 
     @Column(name="recipe_image")
-    private byte[] recipeImage; // Binary data for the image
+    private String recipeImageUrl;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)

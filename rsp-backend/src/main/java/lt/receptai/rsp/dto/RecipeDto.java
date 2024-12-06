@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lt.receptai.rsp.entity.RecipeCategory;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ public class RecipeDto {
     private String recipeName;
     private String recipeIngredients;
     private String recipeSteps;
-    private byte[] recipeImage;
+    private String recipeImageUrl;
     private Long categoryId;
 
 }

@@ -67,7 +67,7 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setRecipeName(updatedRecipe.getRecipeName());
         recipe.setRecipeIngredients(updatedRecipe.getRecipeIngredients());
         recipe.setRecipeSteps(updatedRecipe.getRecipeSteps());
-        recipe.setRecipeImage(updatedRecipe.getRecipeImage());
+        recipe.setRecipeImageUrl(updatedRecipe.getRecipeImageUrl());
 
         RecipeCategory category = recipeCategoryRepository.findById(updatedRecipe.getCategoryId())
                 .orElseThrow(()-> new ResourceNotFoundException("Category is not exist with given id: " + updatedRecipe.getCategoryId()));
