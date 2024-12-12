@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const RecipeComponent = (props) => {
+const RecipeComponent = () => {
   const { recipeName, setRecipeName } = useState("");
   const { ingredients, setIngredients } = useState("");
   const { steps, setSteps } = useState("");
@@ -20,9 +20,9 @@ const RecipeComponent = (props) => {
     recipeIngredients: "",
     recipeImageUrl: "",
     recipeSteps: "",
-    ingredients: "",
-    steps: "",
-    imageUrl: "",
+    recipeIngredients: "",
+    recipeSteps: "",
+    recipeImageUrl: "",
     recipeCategory: "",
   });
 
@@ -34,9 +34,9 @@ const RecipeComponent = (props) => {
         .then((response) => {
           console.log(response.data);
           setRecipeName(response.data.recipeName);
-          setIngredients(response.data.ingredients);
-          setSteps(response.data.steps);
-          setImageUrl(response.data.imageUrl);
+          setRecipeIngredients(response.data.recipeIngredients);
+          setRecipeSteps(response.data.recipeSteps);
+          setRecipeImageUrl(response.data.recipeImageUrl);
           setCategoryId(response.data.categoryId);
         })
         .catch((error) => {
@@ -56,12 +56,10 @@ const RecipeComponent = (props) => {
   // Function to save added or updated data from form
   function saveOrUpdateRecipe(e) {
     e.preventDefault();
-
-    if (validateForm()) { // Add form validation check
-        const recipe = { recipeName, recipeIngredients, recipeSteps, recipeImageUrl, categoryId };
+    
     if (validateForm()) {
       // Add form validation check
-      const book = { recipeName, ingredients, steps, imageUrl, categoryId };
+      const recipe = { recipeName, recipeIngredients, recipeSteps, recipeImageUrl, categoryId };
 
       if (id) {
         // Add a confirmation dialog
@@ -114,9 +112,7 @@ const RecipeComponent = (props) => {
     }
 
     if (recipeIngredients.trim()) {
-        errorsCopy.recipeIngredients = '';
-    if (ingredients.trim()) {
-      errorsCopy.ingredients = "";
+        errorsCopy.recipeIngredients = '';    
     } else {
         errorsCopy.recipeIngredients = 'Ingredients are required';
         valid = false;
@@ -125,14 +121,10 @@ const RecipeComponent = (props) => {
     }
 
     if (recipeSteps.trim()) {
-        errorsCopy.recipeSteps = '';
-    if (steps.trim()) {
-      errorsCopy.steps = "";
+        errorsCopy.recipeSteps = '';    
     } else {
         errorsCopy.recipeSteps = 'Steps are required';
-        valid = false;
-      errorsCopy.steps = "Steps are required";
-      valid = false;
+        valid = false;      
     }
 
     if (categoryId) {
