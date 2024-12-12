@@ -1,18 +1,16 @@
 
 import './App.css'
+import HeaderComponent from './components/HeaderComponent'
+import ListRecipeComponent from './components/ListRecipeComponent'
 
 function App() {
   
 
   return (
     <>
-      
-      <h1>Sveiki atvykę į receptų dalinimosi puslapį!</h1>
-      
-        <p>
-          Čia bus receptų dalinimosi vieta!
-        </p>
-      
+      <HeaderComponent />
+      <ListRecipeComponent/>
+       
       
     </>
   )

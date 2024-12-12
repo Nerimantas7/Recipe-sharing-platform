@@ -2,9 +2,9 @@ import { useState } from "react";
 
 const RecipeComponent = (props) => {
   const { recipeName, setRecipeName } = useState("");
-  const { ingredients, setIngredients } = useState("");
-  const { steps, setSteps } = useState("");
-  const { image, setImage } = useState("");
+  const { recipeIngredients, setRecipeIngredients } = useState("");
+  const { recipeSteps, setRecipeSteps } = useState("");
+  const { recipeImageUrl, setRecipeImageUrl } = useState("");
   const { categoryId, setCategoryId } = useState("");
   const { categories, setCategories } = useState([]);
 
@@ -13,9 +13,9 @@ const RecipeComponent = (props) => {
   // Initialize state variables to hold validation errors
   const [errors, setErrors] = useState({
     recipeName: "",
-    ingredients: "",
-    image: "",
-    steps: "",
+    recipeIngredients: "",
+    recipeImageUrl: "",
+    recipeSteps: "",
     recipeCategory: "",
   });
 
@@ -24,7 +24,7 @@ function saveOrUpdateRecipe(e) {
     e.preventDefault();
 
     if (validateForm()) { // Add form validation check
-        const book = { recipeName, ingredients, steps, image, categoryId };
+        const recipe = { recipeName, recipeIngredients, recipeSteps, recipeImageUrl, categoryId };
 
         if (id) {
             // Add a confirmation dialog
@@ -72,17 +72,17 @@ function saveOrUpdateRecipe(e) {
         valid = false;
     }
 
-    if (ingredients.trim()) {
-        errorsCopy.ingredients = '';
+    if (recipeIngredients.trim()) {
+        errorsCopy.recipeIngredients = '';
     } else {
-        errorsCopy.ingredients = 'Ingredients are required';
+        errorsCopy.recipeIngredients = 'Ingredients are required';
         valid = false;
     }
 
-    if (steps.trim()) {
-        errorsCopy.steps = '';
+    if (recipeSteps.trim()) {
+        errorsCopy.recipeSteps = '';
     } else {
-        errorsCopy.steps = 'Steps are required';
+        errorsCopy.recipeSteps = 'Steps are required';
         valid = false;
     }
 
@@ -136,11 +136,11 @@ return (
                                 type='text'
                                 placeholder='Enter ingredients'
                                 name='ingredients'
-                                value={ingredients}
-                                className={`form-control ${errors.ingredients ? 'is-invalid' : ''}`}
-                                onChange={(e) => setIngredients(e.target.value)}
+                                value={recipeIngredients}
+                                className={`form-control ${errors.recipeIngredients ? 'is-invalid' : ''}`}
+                                onChange={(e) => setRecipeIngredients(e.target.value)}
                             />
-                            {errors.ingredients && <div className='invalid-feedback'>{errors.ingredients}</div>}
+                            {errors.recipeIngredients && <div className='invalid-feedback'>{errors.recipeIngredients}</div>}
                         </div>
                        
                         <div className='form-group mb-2'>
@@ -149,11 +149,11 @@ return (
                                     type='text'
                                     placeholder='Enter steps'
                                     name='steps'
-                                    value={steps}
-                                    className={`form-control ${errors.steps ? 'is-invalid' : ''}`}
-                                    onChange={(e) => setSteps(e.target.value)}
+                                    value={recipeSteps}
+                                    className={`form-control ${errors.recipeSteps ? 'is-invalid' : ''}`}
+                                    onChange={(e) => setRecipeSteps(e.target.value)}
                                 />
-                                {errors.steps && <div className='invalid-feedback'>{errors.steps}</div>}
+                                {errors.recipeSteps && <div className='invalid-feedback'>{errors.recipeSteps}</div>}
                             </div>
 
                         <div className='form-group mb-2'>
@@ -161,12 +161,12 @@ return (
                             <input
                                 type='text'
                                 placeholder='Add image'
-                                name='imagePath'
-                                value={image}
-                                className={`form-control ${errors.image ? 'is-invalid' : ''}`}
-                                onChange={(e) => setImage(e.target.value)}
+                                name='recipeImageUrl'
+                                value={recipeImageUrl}
+                                className={`form-control ${errors.recipeImageUrl ? 'is-invalid' : ''}`}
+                                onChange={(e) => setRecipeImageUrl(e.target.value)}
                             />
-                            {errors.image && <div className='invalid-feedback'>{errors.image}</div>}
+                            {errors.recipeImageUrl && <div className='invalid-feedback'>{errors.recipeImageUrl}</div>}
                         </div>                        
 
                         <div className='form-group mb-2'>
