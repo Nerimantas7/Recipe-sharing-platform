@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,10 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public RecipeDto addRecipe(RecipeDto recipeDto) {
+
+        if (recipeDto.getRecipeIngredients() == null || recipeDto.getRecipeIngredients().isEmpty()) {
+            throw new IllegalArgumentException("Recipe ingredients must not be empty.");
+        }
 
         //convert RecipeDto into Recipe Jpa entity
         Recipe recipe =modelMapper.map(recipeDto, Recipe.class);
@@ -64,6 +69,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         Recipe recipe = recipeRepository.findById(recipeId).
                 orElseThrow(()-> new ResourceNotFoundException("Recipe not found with given id: " + recipeId));
+
         recipe.setRecipeName(updatedRecipe.getRecipeName());
         recipe.setRecipeIngredients(updatedRecipe.getRecipeIngredients());
         recipe.setRecipeSteps(updatedRecipe.getRecipeSteps());
@@ -82,5 +88,17 @@ public class RecipeServiceImpl implements RecipeService {
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(()-> new ResourceNotFoundException("Recipe not found with given id: " + recipeId));
         recipeRepository.deleteById(recipeId);
+    }
+
+    private void validateRecipeDto(RecipeDto recipeDto) {
+        if (recipeDto.getRecipeName() == null || recipeDto.getRecipeName().isEmpty()) {
+            throw new IllegalArgumentException("Recipe name must not be empty.");
+        }
+        if (recipeDto.getRecipeIngredients() == null || recipeDto.getRecipeIngredients().isEmpty()) {
+            throw new IllegalArgumentException("Recipe ingredients must not be empty.");
+        }
+        if (recipeDto.getRecipeSteps() == null || recipeDto.getRecipeSteps().isEmpty()) {
+            throw new IllegalArgumentException("Recipe steps must not be empty.");
+        }
     }
 }

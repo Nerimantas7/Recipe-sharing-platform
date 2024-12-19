@@ -24,7 +24,7 @@ public class RecipeController {
     //Build Add Recipe REST API
 
     @PostMapping
-    public ResponseEntity<RecipeDto> addRecipe(@RequestBody RecipeDto recipeDto){
+    public ResponseEntity<RecipeDto> addRecipe(@Valid @RequestBody RecipeDto recipeDto){
         RecipeDto savedRecipe = recipeService.addRecipe(recipeDto);
         return new ResponseEntity<>(savedRecipe, HttpStatus.CREATED);
     }
@@ -37,9 +37,10 @@ public class RecipeController {
         return new ResponseEntity<>(recipeDto, HttpStatus.OK);
     }
 
-    // Build Get All Recipes REST API
+    // Build Get All Recipes REST API with Pagination
     @GetMapping
-    public ResponseEntity<List<RecipeDto>> getAllRecipes(){
+    public ResponseEntity<List<RecipeDto>> getAllRecipes(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "10") int size){
 
         List<RecipeDto> recipes = recipeService.getAllRecipes();
         return ResponseEntity.ok(recipes);
@@ -47,7 +48,7 @@ public class RecipeController {
 
     // Build Update Recipe REST API
     @PutMapping("{id}")
-    public ResponseEntity<RecipeDto> updateRecipe(@RequestBody RecipeDto recipeDto, @PathVariable("id") Long recipeId){
+    public ResponseEntity<RecipeDto> updateRecipe(@Valid @RequestBody RecipeDto recipeDto, @PathVariable("id") Long recipeId){
         RecipeDto updatedRecipe = recipeService.updateRecipe(recipeDto, recipeId);
         return ResponseEntity.ok(updatedRecipe);
     }
@@ -58,4 +59,18 @@ public class RecipeController {
         recipeService.deleteRecipe(recipeId);
         return ResponseEntity.ok("Recipe deleted successfully!");
     }
+
+    //Optional:
+    // Upload Recipe Image
+//    @PostMapping(value = "/upload/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<String> uploadImage(
+//            @PathVariable("id") Long recipeId,
+//            @RequestParam("file") MultipartFile file) {
+//        try {
+//            recipeService.uploadRecipeImage(recipeId, file);
+//            return ResponseEntity.ok("Image uploaded successfully!");
+//        } catch (IOException ex) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading image");
+//        }
+//    }
 }

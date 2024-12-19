@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -26,9 +27,15 @@ public class Recipe {
     @Size(min = 3, max = 100, message = "Recipe name must be between 3 and 100 characters.")
     private String recipeName;
 
-    @Column(name = "recipe_ingredients", nullable = false)
+//    @Column(name = "recipe_ingredients", nullable = false)
+//    @NotEmpty(message = "Recipe ingredients must not be empty.")
+//    private String recipeIngredients;
+
     @NotEmpty(message = "Recipe ingredients must not be empty.")
-    private String recipeIngredients;
+    @ElementCollection
+    @CollectionTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"))
+    @Column(name = "ingredient", nullable = false)
+    private List<String> recipeIngredients = new ArrayList<>(); // Store as a list
 
     @Column(name = "recipe_steps", nullable = false)
     private String recipeSteps;
@@ -41,10 +48,10 @@ public class Recipe {
     private RecipeCategory recipeCategory;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<RecipeComment> recipeComments; // Collection of comments
+    private List<RecipeComment> recipeComments = new ArrayList<>(); // Collection of comments
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<RecipeLike> recipeLikes; // Collection of likes/dislikes
+    private List<RecipeLike> recipeLikes = new ArrayList<>(); // Collection of likes/dislikes
 
     public long getTotalLikes() {
         return recipeLikes.stream().filter(RecipeLike::getLiked).count();
