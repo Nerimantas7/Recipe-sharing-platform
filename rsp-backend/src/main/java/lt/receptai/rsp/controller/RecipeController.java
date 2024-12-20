@@ -26,6 +26,7 @@ public class RecipeController {
     @PostMapping
     public ResponseEntity<RecipeDto> addRecipe(@Valid @RequestBody RecipeDto recipeDto){
         RecipeDto savedRecipe = recipeService.addRecipe(recipeDto);
+        System.out.println("Recipe added successfully: " + savedRecipe.getRecipeName());
         return new ResponseEntity<>(savedRecipe, HttpStatus.CREATED);
     }
 

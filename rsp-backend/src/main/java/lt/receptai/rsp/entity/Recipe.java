@@ -37,7 +37,8 @@ public class Recipe {
     @Column(name = "ingredient", nullable = false)
     private List<String> recipeIngredients = new ArrayList<>(); // Store as a list
 
-    @Column(name = "recipe_steps", nullable = false)
+    @Column(name = "recipe_steps", nullable = false, length = 1000)
+
     private String recipeSteps;
 
     @Column(name="recipe_image")

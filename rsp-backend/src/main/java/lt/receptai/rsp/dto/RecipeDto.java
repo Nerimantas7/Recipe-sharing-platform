@@ -1,5 +1,6 @@
 package lt.receptai.rsp.dto;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +29,8 @@ public class RecipeDto {
     private List<String> recipeIngredients;
 
     @NotNull(message = "Recipe steps must not be null.")
-    @Size(min = 10, message = "Recipe steps must be at least 10 characters.")
+    @Column(name = "recipe_steps", nullable = false, length = 1000) // Updated length
+    @Size(min = 10, max = 1000, message = "Recipe steps must be between 10 and 500 characters.")
     private String recipeSteps;
 
     private String recipeImageUrl;
