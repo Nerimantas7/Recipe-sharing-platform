@@ -1,6 +1,11 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+
 
 const Header = () => {
+
+//   const navigator =useNavigate();
+
   return (
     <div>
          <header className='header'>
@@ -23,12 +28,21 @@ const Header = () => {
                                     </li>
                                 {/* } */}
 
-                                {/* { */}
+                                 {/* { */}
                                     {/* // isAuth && */}
                                     <li className="nav-item">
                                         <a className="nav-link" href="/categories">Categories</a>
                                     </li>
                                 {/* } */}
+
+                                {/* { */}
+                                    {/* // isAdmin && */}
+                                    <li className="nav-item">
+                                        <a className="nav-link" href="/add-category">Add new category</a>
+                                    </li>
+                                {/* } */}
+
+                               
 
                                 <li className="nav-item">
                                     <a className="nav-link" href="/comments">Comments</a>

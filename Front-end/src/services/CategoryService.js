@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const CATEGORY_REST_API_BASE_URL = 'http://localhost:8282/api/categories'
+const CATEGORY_REST_API_BASE_URL = 'http://localhost:8080/api/categories'
 
 export const getAllCategories = () => axios.get(CATEGORY_REST_API_BASE_URL);
 
