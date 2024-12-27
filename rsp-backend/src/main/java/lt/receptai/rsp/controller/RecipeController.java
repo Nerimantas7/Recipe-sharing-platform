@@ -33,7 +33,7 @@ public class RecipeController {
     //Build Get Recipe REST API
 
     @GetMapping("{id}")
-    public ResponseEntity<RecipeDto> getRecipe(@PathVariable("id") Long recipeId){
+    public ResponseEntity<RecipeDto> getRecipeById(@PathVariable("id") Long recipeId){
         RecipeDto recipeDto = recipeService.getRecipeById(recipeId);
         return new ResponseEntity<>(recipeDto, HttpStatus.OK);
     }

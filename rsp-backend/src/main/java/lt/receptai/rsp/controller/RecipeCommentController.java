@@ -29,7 +29,7 @@ public class RecipeCommentController {
     //Build Get Comment REST API
 
     @GetMapping("{id}")
-    public ResponseEntity<RecipeCommentDto> getComment(@PathVariable("id") Long commentId){
+    public ResponseEntity<RecipeCommentDto> getCommentById(@PathVariable("id") Long commentId){
         RecipeCommentDto recipeCommentDto = recipeCommentService.getCommentById(commentId);
         return new ResponseEntity<>(recipeCommentDto, HttpStatus.OK);
     }

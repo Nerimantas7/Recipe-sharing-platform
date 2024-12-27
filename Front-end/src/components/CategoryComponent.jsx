@@ -33,14 +33,14 @@ const CategoryComponent = () => {
                 console.log(response.data);
                 navigator('/categories');
             }).catch(error => {
-                console.error(error);
+                console.error('Error updating category:', error);
             })
         } else {
             createCategory(category).then((response) => {
                 console.log(response.data);
                 navigator('/categories');
             }).catch(error => {
-                console.error(error);
+                console.error('Error creating category:', error);
             })
         }
     }

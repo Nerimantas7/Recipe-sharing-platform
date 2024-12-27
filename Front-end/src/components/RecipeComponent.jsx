@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
+import { createRecipe, getRecipe, updateRecipe } from "../services/RecipeService";
 import { useNavigate, useParams } from "react-router-dom";
+import { getAllCategories } from "../services/CategoryService";
 
 const RecipeComponent = () => {
-  const { recipeName, setRecipeName } = useState("");
-  const { ingredients, setIngredients } = useState("");
-  const { steps, setSteps } = useState("");
-  const { imageUrl, setImageUrl } = useState("");
-  const { recipeIngredients, setRecipeIngredients } = useState("");
-  const { recipeSteps, setRecipeSteps } = useState("");
-  const { recipeImageUrl, setRecipeImageUrl } = useState("");
-  const { categoryId, setCategoryId } = useState("");
-  const { categories, setCategories } = useState([]);
+  const [recipeName, setRecipeName] = useState("");
+  const [recipeIngredients, setRecipeIngredients] = useState("");
+  const [recipeSteps, setRecipeSteps] = useState("");
+  const [recipeImageUrl, setRecipeImageUrl] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [categories, setCategories] = useState([]);
 
   const { id } = useParams();
 
@@ -20,10 +19,6 @@ const RecipeComponent = () => {
     recipeIngredients: "",
     recipeImageUrl: "",
     recipeSteps: "",
-    recipeIngredients: "",
-    recipeSteps: "",
-    recipeImageUrl: "",
-    recipeCategory: "",
   });
 
   const navigator = useNavigate();
@@ -33,11 +28,12 @@ const RecipeComponent = () => {
       getRecipe(id)
         .then((response) => {
           console.log(response.data);
-          setRecipeName(response.data.recipeName);
-          setRecipeIngredients(response.data.recipeIngredients);
-          setRecipeSteps(response.data.recipeSteps);
-          setRecipeImageUrl(response.data.recipeImageUrl);
-          setCategoryId(response.data.categoryId);
+          const recipe = recipeResponse.data;
+          setRecipeName(recipe.recipeName);
+          setRecipeIngredients(recipe.recipeIngredients);
+          setRecipeSteps(recipe.recipeSteps);
+          setRecipeImageUrl(recipe.recipeImageUrl);
+          setCategoryId(recipe.categoryId);
         })
         .catch((error) => {
           console.error(error);
@@ -56,10 +52,16 @@ const RecipeComponent = () => {
   // Function to save added or updated data from form
   function saveOrUpdateRecipe(e) {
     e.preventDefault();
-    
+
     if (validateForm()) {
       // Add form validation check
-      const recipe = { recipeName, recipeIngredients, recipeSteps, recipeImageUrl, categoryId };
+      const recipe = {
+        recipeName,
+        recipeIngredients,
+        recipeSteps,
+        recipeImageUrl,
+        categoryId,
+      };
 
       if (id) {
         // Add a confirmation dialog
@@ -99,48 +101,23 @@ const RecipeComponent = () => {
 
   // Function to check the form data
   function validateForm() {
-    let valid = true;
-
-    // Use spread operator(...) to copy object into another object
-    const errorsCopy = { ...errors };
-
-    if (recipeName.trim()) {
-      errorsCopy.recipeName = "";
-    } else {
-      errorsCopy.recipeName = "Recipe name is required";
-      valid = false;
+    const errorsCopy = {};
+  
+    if (!recipeName.trim()) errorsCopy.recipeName = "Recipe name is required";
+    if (!recipeIngredients.trim()) errorsCopy.recipeIngredients = "Ingredients are required";
+    if (!recipeSteps.trim()) errorsCopy.recipeSteps = "Steps are required";
+    if (!categoryId) errorsCopy.recipeCategory = "Category is required";
+    if (!recipeImageUrl.trim() || !/^https?:\/\/.+\.(jpg|jpeg|png|gif)$/.test(recipeImageUrl)) {
+      errorsCopy.recipeImageUrl = "Valid image URL is required";
     }
-
-    if (recipeIngredients.trim()) {
-        errorsCopy.recipeIngredients = '';    
-    } else {
-        errorsCopy.recipeIngredients = 'Ingredients are required';
-        valid = false;
-      errorsCopy.ingredients = "Ingredients are required";
-      valid = false;
-    }
-
-    if (recipeSteps.trim()) {
-        errorsCopy.recipeSteps = '';    
-    } else {
-        errorsCopy.recipeSteps = 'Steps are required';
-        valid = false;      
-    }
-
-    if (categoryId) {
-      errorsCopy.recipeCategory = "";
-    } else {
-      errorsCopy.recipeCategory = "Select category";
-      valid = false;
-    }
-
+  
     setErrors(errorsCopy);
-
-    return valid;
+    return Object.keys(errorsCopy).length === 0;
   }
+  
 
   const handleCancel = () => {
-    navigator("/");
+    navigator("/recipes");
   };
 
   function pageTitle() {
@@ -173,43 +150,22 @@ const RecipeComponent = () => {
                 )}
               </div>
 
-                        <div className='form-group mb-2'>
-                            <label className='form-label'>Ingredients:</label>
-                            <input
-                                type='text'
-                                placeholder='Enter ingredients'
-                                name='ingredients'
-                                value={recipeIngredients}
-                                className={`form-control ${errors.recipeIngredients ? 'is-invalid' : ''}`}
-                                onChange={(e) => setRecipeIngredients(e.target.value)}
-                            />
-                            {errors.recipeIngredients && <div className='invalid-feedback'>{errors.recipeIngredients}</div>}
-                        </div>
-                       
-                        <div className='form-group mb-2'>
-                                <label className='form-label'>Steps:</label>
-                                <input
-                                    type='text'
-                                    placeholder='Enter steps'
-                                    name='steps'
-                                    value={recipeSteps}
-                                    className={`form-control ${errors.recipeSteps ? 'is-invalid' : ''}`}
-                                    onChange={(e) => setRecipeSteps(e.target.value)}
-                                />
-                                {errors.recipeSteps && <div className='invalid-feedback'>{errors.recipeSteps}</div>}
-                            </div>
               <div className="form-group mb-2">
                 <label className="form-label">Ingredients:</label>
                 <input
                   type="text"
                   placeholder="Enter ingredients"
-                  name="ingredients"
-                  value={ingredients}
-                  className={`form-control ${errors.ingredients ? "is-invalid" : ""}`}
-                  onChange={(e) => setIngredients(e.target.value)}
+                  name="recipeIngredients"
+                  value={recipeIngredients}
+                  className={`form-control ${errors.recipeIngredients ? "is-invalid" : ""}`}
+                  onChange={(e) =>
+                    setRecipeIngredients(e.target.value.split(","))
+                  }
                 />
-                {errors.ingredients && (
-                  <div className="invalid-feedback">{errors.ingredients}</div>
+                {errors.recipeIngredients && (
+                  <div className="invalid-feedback">
+                    {errors.recipeIngredients}
+                  </div>
                 )}
               </div>
 
@@ -219,39 +175,29 @@ const RecipeComponent = () => {
                   type="text"
                   placeholder="Enter steps"
                   name="steps"
-                  value={steps}
-                  className={`form-control ${errors.steps ? "is-invalid" : ""}`}
-                  onChange={(e) => setSteps(e.target.value)}
+                  value={recipeSteps}
+                  className={`form-control ${errors.recipeSteps ? "is-invalid" : ""}`}
+                  onChange={(e) => setRecipeSteps(e.target.value)}
                 />
-                {errors.steps && (
-                  <div className="invalid-feedback">{errors.steps}</div>
+                {errors.recipeSteps && (
+                  <div className="invalid-feedback">{errors.recipeSteps}</div>
                 )}
               </div>
 
-                        <div className='form-group mb-2'>
-                            <label className='form-label'>Add image:</label>
-                            <input
-                                type='text'
-                                placeholder='Add image'
-                                name='recipeImageUrl'
-                                value={recipeImageUrl}
-                                className={`form-control ${errors.recipeImageUrl ? 'is-invalid' : ''}`}
-                                onChange={(e) => setRecipeImageUrl(e.target.value)}
-                            />
-                            {errors.recipeImageUrl && <div className='invalid-feedback'>{errors.recipeImageUrl}</div>}
-                        </div>                        
               <div className="form-group mb-2">
-                <label className="form-label">Add image:</label>
+                <label className="form-label">Image:</label>
                 <input
                   type="text"
                   placeholder="Add image"
-                  name="imageUrl"
-                  value={imageUrl}
-                  className={`form-control ${errors.imageUrl ? "is-invalid" : ""}`}
-                  onChange={(e) => setImageUrl(e.target.value)}
+                  name="recipeImageUrl"
+                  value={recipeImageUrl}
+                  className={`form-control ${errors.recipeImageUrl ? "is-invalid" : ""}`}
+                  onChange={(e) => setRecipeImageUrl(e.target.value)}
                 />
-                {errors.imageUrl && (
-                  <div className="invalid-feedback">{errors.imageUrl}</div>
+                {errors.recipeImageUrl && (
+                  <div className="invalid-feedback">
+                    {errors.recipeImageUrl}
+                  </div>
                 )}
               </div>
 

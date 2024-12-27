@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -21,7 +22,7 @@ public class RecipeCategoryController {
     //Build Add Category REST API
 
     @PostMapping
-    public ResponseEntity<RecipeCategoryDto> addCategory(@RequestBody RecipeCategoryDto recipeCategoryDto){
+    public ResponseEntity<RecipeCategoryDto> addCategory(@Valid @RequestBody RecipeCategoryDto recipeCategoryDto){
 
         RecipeCategoryDto savedCategory = recipeCategoryService.addCategory(recipeCategoryDto);
         return  new ResponseEntity<>(savedCategory, HttpStatus.CREATED);
@@ -30,7 +31,7 @@ public class RecipeCategoryController {
     //Build Get Category REST API
 
     @GetMapping("{id}")
-    public ResponseEntity<RecipeCategoryDto> getCategory(@PathVariable("id") Long categoryId){
+    public ResponseEntity<RecipeCategoryDto> getCategoryById(@PathVariable("id") Long categoryId){
         RecipeCategoryDto recipeCategoryDto = recipeCategoryService.getCategoryById(categoryId);
         return new ResponseEntity<>(recipeCategoryDto, HttpStatus.OK);
     }

@@ -22,7 +22,7 @@ public class RecipeLikeController {
 
     //Build Get Recipe Like REST API
     @GetMapping("{id}")
-    public ResponseEntity<RecipeLikeDto> getLike(@PathVariable("id") Long likeId){
+    public ResponseEntity<RecipeLikeDto> getLikeById(@PathVariable("id") Long likeId){
         RecipeLikeDto likeDto = recipeLikeService.getLikeById(likeId);
         return new ResponseEntity<>(likeDto, HttpStatus.OK);
     }
