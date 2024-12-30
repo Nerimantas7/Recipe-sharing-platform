@@ -6,6 +6,7 @@ import lt.receptai.rsp.dto.RecipeDto;
 import lt.receptai.rsp.service.RecipeCategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ public class RecipeCategoryController {
 
     //Build Add Category REST API
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<RecipeCategoryDto> addCategory(@Valid @RequestBody RecipeCategoryDto recipeCategoryDto){
 
@@ -29,7 +31,7 @@ public class RecipeCategoryController {
     }
 
     //Build Get Category REST API
-
+    @PreAuthorize("hasAnyRole('ADMIN','USER','QUEST')") //?
     @GetMapping("{id}")
     public ResponseEntity<RecipeCategoryDto> getCategoryById(@PathVariable("id") Long categoryId){
         RecipeCategoryDto recipeCategoryDto = recipeCategoryService.getCategoryById(categoryId);
@@ -37,6 +39,7 @@ public class RecipeCategoryController {
     }
 
     // Build Get All Recipes Categories REST API
+    @PreAuthorize("hasAnyRole('ADMIN','USER','QUEST')") // ?
     @GetMapping
     public ResponseEntity<List<RecipeCategoryDto>> getAllCategories(){
 
@@ -45,6 +48,7 @@ public class RecipeCategoryController {
     }
 
     //Build Update Recipe Category REST API
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("{id}")
     public ResponseEntity<RecipeCategoryDto> updateCategory(@RequestBody RecipeCategoryDto categoryDto, @PathVariable("id") Long categoryId){
         RecipeCategoryDto updatedCategory = recipeCategoryService.updateCategory(categoryDto, categoryId);
@@ -52,6 +56,7 @@ public class RecipeCategoryController {
     }
 
     //Build Delete Recipe Category REST API
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable("id") Long categoryId){
         recipeCategoryService.deleteCategory(categoryId);

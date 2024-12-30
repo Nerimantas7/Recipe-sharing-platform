@@ -25,11 +25,15 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @NotBlank(message = "Name is required")
+    private String name;
+
+    @Column(nullable = false, unique = true)
     @NotBlank(message = "Username is required")
     private String userName;
 
     @Column(nullable = false, unique = true)
-    @Email(message = "Invalid message format")
+    @Email(message = "Invalid email format")
     private String email;
 
     @Column(nullable = false)
