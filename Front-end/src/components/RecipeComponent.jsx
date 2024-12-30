@@ -28,7 +28,7 @@ const RecipeComponent = () => {
       getRecipe(id)
         .then((response) => {
           console.log(response.data);
-          const recipe = recipeResponse.data;
+          const recipe = response.data;
           setRecipeName(recipe.recipeName);
           setRecipeIngredients(recipe.recipeIngredients);
           setRecipeSteps(recipe.recipeSteps);
