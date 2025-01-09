@@ -55,6 +55,7 @@ public class RecipeController {
     @PutMapping("{id}")
     public ResponseEntity<RecipeDto> updateRecipe(@Valid @RequestBody RecipeDto recipeDto, @PathVariable("id") Long recipeId){
         RecipeDto updatedRecipe = recipeService.updateRecipe(recipeDto, recipeId);
+        System.out.println("Recipe updated successfully: " + updatedRecipe.getRecipeName());
         return ResponseEntity.ok(updatedRecipe);
     }
 

@@ -27,6 +27,7 @@ public class RecipeCategoryController {
     public ResponseEntity<RecipeCategoryDto> addCategory(@Valid @RequestBody RecipeCategoryDto recipeCategoryDto){
 
         RecipeCategoryDto savedCategory = recipeCategoryService.addCategory(recipeCategoryDto);
+        System.out.println("Category added successfully: " + savedCategory.getRecipeCategory());
         return  new ResponseEntity<>(savedCategory, HttpStatus.CREATED);
     }
 
@@ -52,6 +53,7 @@ public class RecipeCategoryController {
     @PutMapping("{id}")
     public ResponseEntity<RecipeCategoryDto> updateCategory(@RequestBody RecipeCategoryDto categoryDto, @PathVariable("id") Long categoryId){
         RecipeCategoryDto updatedCategory = recipeCategoryService.updateCategory(categoryDto, categoryId);
+        System.out.println("Category updated successfully: " + updatedCategory.getRecipeCategory());
         return  ResponseEntity.ok(updatedCategory);
     }
 
