@@ -15,5 +15,5 @@ public class RecipeCommentDto {
     private String recipeComment;
     private Long recipeId;
     private Long userId;
-    private String username;
+//    private String username;
 }

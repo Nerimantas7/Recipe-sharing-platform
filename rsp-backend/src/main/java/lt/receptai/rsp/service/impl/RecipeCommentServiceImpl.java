@@ -25,7 +25,7 @@ public class RecipeCommentServiceImpl implements RecipeCommentService {
     @Override
     public RecipeCommentDto addComment(RecipeCommentDto recipeCommentDto) {
 
-        //convert Recipe Comment Dto into Recipe Caomment Jpa entity
+        //convert Recipe Comment Dto into Recipe Comment Jpa entity
         RecipeComment recipeComment = modelMapper.map(recipeCommentDto, RecipeComment.class);
 
         //Recipe Comment Jpa entity
@@ -50,6 +50,11 @@ public class RecipeCommentServiceImpl implements RecipeCommentService {
         List<RecipeComment> comments = recipeCommentRepository.findAll();
         return comments.stream().map((comment)->modelMapper.map(comment, RecipeCommentDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public List<RecipeCommentDto> getCommentsByRecipeId(Long recipeId) {
+        List<RecipeComment> comments = recipeCommentRepository.findByRecipeId(recipeId);
+        return comments.stream().map(comment -> modelMapper.map(comment, RecipeCommentDto.class)).collect(Collectors.toList());
     }
 
     @Override

@@ -12,6 +12,8 @@ public interface RecipeCommentService {
 
     List<RecipeCommentDto> getAllComments();
 
+    List<RecipeCommentDto> getCommentsByRecipeId(Long recipeId);
+
     RecipeCommentDto updateComment(RecipeCommentDto commentDto, Long commentId);
 
     void  deleteComment(Long commentId);

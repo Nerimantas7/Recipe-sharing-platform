@@ -7,6 +7,7 @@ import lt.receptai.rsp.dto.RecipeCommentDto;
 import lt.receptai.rsp.service.RecipeCommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class RecipeCommentController {
 
     private RecipeCommentService recipeCommentService;
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping
     public ResponseEntity<RecipeCommentDto> addComment(@RequestBody RecipeCommentDto recipeCommentDto){
 
@@ -42,7 +44,15 @@ public class RecipeCommentController {
         return ResponseEntity.ok(comments);
     }
 
+    // Build Get All Comments for a Specific Recipe REST API
+    @GetMapping("/recipe/{recipeId}")
+    public ResponseEntity<List<RecipeCommentDto>> getCommentsByRecipeId(@PathVariable("recipeId") Long recipeId) {
+        List<RecipeCommentDto> comments = recipeCommentService.getCommentsByRecipeId(recipeId);
+        return ResponseEntity.ok(comments);
+    }
+
     //Build Update Comment REST API
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("{id}")
     public ResponseEntity<RecipeCommentDto> updateComment(@RequestBody RecipeCommentDto commentDto, @PathVariable("id") Long commentId){
         RecipeCommentDto updatedComment = recipeCommentService.updateComment(commentDto, commentId);
@@ -50,6 +60,7 @@ public class RecipeCommentController {
     }
 
     //Build Delete Comment REST API
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteComment(@PathVariable("id") Long commentId){
         recipeCommentService.deleteComment(commentId);
