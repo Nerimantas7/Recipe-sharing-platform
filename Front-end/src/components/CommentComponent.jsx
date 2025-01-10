@@ -1,13 +1,12 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { createComment, updateComment } from "../services/CommentService";
 
 const CommentComponent = () => {
   const [recipeComment, setRecipeComment] = useState("");
 
-  const [errors, setErrors] = useState({
-    recipeComment: "",
-  });
+  const [errors, setErrors] = useState({ recipeComment: "" });
 
   const { id } = useParams();
 
@@ -19,42 +18,38 @@ const CommentComponent = () => {
 
     if (validateForm()) {
       // Add form validation check
-      const recipe = {
-        recipeName,
-        recipeIngredients,
-        recipeSteps,
-        recipeImageUrl,
-        categoryId,
-      };
+      const comment = { recipeComment };
 
       if (id) {
         // Add a confirmation dialog
-        if (window.confirm("Are you sure to update this recipe?")) {
-          console.log(recipe);
+        if (window.confirm("Are you sure to update this comment?")) {
+          console.log(comment);
 
-          updateRecipe(id, recipe)
+          updateComment(id, comment)
             .then((response) => {
-              console.log(response.data);
-              navigator("/recipes"); //not exist yet
+              console.log("Comment updated:", response.data);
+              navigator("/recipes");
             })
             .catch((error) => {
-              console.error(error);
+              console.error("Error updating comment:", error);
+              alert("Failed to update the comment.");
             });
         } else {
           console.log("Update operation cancelled");
         }
       } else {
         // Add a confirmation dialog
-        if (window.confirm("Are you want to save this recipe?")) {
-          console.log(recipe);
+        if (window.confirm("Are you want to save this comment?")) {
+          console.log(comment);
 
-          createRecipe(recipe)
+          createComment(comment)
             .then((response) => {
-              console.log(response.data);
+              console.log("Comment created:", response.data);
               navigator("/recipes");
             })
             .catch((error) => {
-              console.error(error);
+              console.error("Error creating comment:", error);
+              alert("Failed to create the comment.");
             });
         } else {
           console.log("Save operation cancelled");
@@ -68,7 +63,7 @@ const CommentComponent = () => {
     const errorsCopy = {};
 
     if (!recipeComment.trim()) {
-      errorsCopy.recipeComments = "Comment is required";
+      errorsCopy.recipeComment = "Comment is required";
     }
     setErrors(errorsCopy);
     return Object.keys(errorsCopy).length === 0;
@@ -79,44 +74,37 @@ const CommentComponent = () => {
   };
 
   return (
-    <div class="modal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Recipe comment</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <label className="form-label">Comment:</label>
-            <input
-              type="text"
-              placeholder="Enter comment"
-              name="comment"
-              value={recipeComment}
-              className={`form-control ${errors.recipeComment ? "is-invalid" : ""}`}
-              onChange={(e) => setRecipeComment(e.target.value)}
-            />
-            {errors.recipeComment && (
-              <div className="invalid-feedback">{errors.recipeComment}</div>
-            )}
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-primary"
-              onClick={saveOrUpdateComment}
-            >
-              Submit
-            </button>
-            <button className="btn btn-secondary mx-3" onClick={handleCancel}>
-              Cancel
-            </button>
-          </div>
+    <div className="modal-backdrop">
+      <div className="modal">
+        <div className="modal-header">
+          <h5 className="modal-title">Recipe Comment</h5>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={handleCancel}
+          ></button>
+        </div>
+        <div className="modal-body">
+          <label className="form-label">Comment:</label>
+          <input
+            type="text"
+            placeholder="Enter comment"
+            name="recipeComment"
+            value={recipeComment}
+            className={`form-control ${errors.recipeComment ? "is-invalid" : ""}`}
+            onChange={(e) => setRecipeComment(e.target.value)}
+          />
+          {errors.recipeComment && (
+            <div className="invalid-feedback">{errors.recipeComment}</div>
+          )}
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-primary" onClick={saveOrUpdateComment}>
+            Submit
+          </button>
+          <button className="btn btn-secondary" onClick={handleCancel}>
+            Cancel
+          </button>
         </div>
       </div>
     </div>

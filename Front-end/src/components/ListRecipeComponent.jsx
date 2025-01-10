@@ -2,15 +2,22 @@ import React, { useEffect, useState } from "react";
 import { listRecipes } from "../services/RecipeService";
 import { useNavigate } from "react-router-dom";
 import { isUserLoggedIn } from "../services/AuthService";
+import CommentComponent from "../components/CommentComponent";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const ListRecipeComponent = () => {
+
   const [recipes, setRecipes] = useState([]);
 
-  const navigator = useNavigate();
+  const [selectedRecipeId, setSelectedRecipeId] = useState(null);
 
+  const [showCommentModal, setShowCommentModal] = useState(false);
+
+  const [showCommentsModal, setShowCommentsModal] = useState(false);
+
+  const navigator = useNavigate();
   const isAuth = isUserLoggedIn();
 
   useEffect(() => {
@@ -26,16 +33,13 @@ const ListRecipeComponent = () => {
   function updateRecipe(id) {
     navigator(`/edit-recipe/${id}`); //must be backtick symbols
   }
-  function updateRecipe(id) {
-    navigator(`/edit-recipe/${id}`); //must be backtick symbols
-  }
 
   function removeRecipe(id) {
     console.log(id);
 
     if (window.confirm("Are you sure you want to delete this recipe?")) {
       deleteRecipe(id)
-        .then((response) => {
+        .then(() => {
           getAllRecipes();
         })
         .catch((error) => {
@@ -45,6 +49,22 @@ const ListRecipeComponent = () => {
       console.log("Delete operation cancelled");
     }
   }
+
+  const handleAddComment = (recipeId) => {
+    setSelectedRecipeId(recipeId);
+    setShowCommentModal(true);
+  };
+
+  const handleShowComments = (recipeId) => {
+    setSelectedRecipeId(recipeId);
+    setShowCommentsModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowCommentModal(false);
+    setShowCommentsModal(false);
+    setSelectedRecipeId(null);
+  };
 
   return (
     <div>
@@ -72,14 +92,14 @@ const ListRecipeComponent = () => {
                 {isAuth && (
                   <button
                     className="btn btn-outline-secondary"
-                    onClick={() => handleShowModal(recipe)}
+                    onClick={() => handleAddComment(recipe.id)}
                   >
                     Write a comment
                   </button>
                 )}
                 <button
                   className="btn btn-outline-secondary mx-3"
-                  onClick={() => handleShowModal(recipe)}
+                  onClick={() => handleShowComments(recipe.id)}
                 >
                   Read comments
                 </button>
@@ -108,6 +128,44 @@ const ListRecipeComponent = () => {
           // </div>
         ))}
       </div>
+
+      {/* Modal for Adding Comments */}
+      {showCommentModal && (
+        <div className="modal show d-block">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <CommentComponent recipeId={selectedRecipeId} />
+              <button
+                className="btn btn-secondary mt-3"
+                onClick={handleCloseModal}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for Reading Comments */}
+      {/* {showCommentsModal && (
+        <div className="modal show d-block">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <h5 className="modal-title">Comments</h5>
+              <div className="modal-body"> */}
+                {/* Add logic to fetch and display comments for selectedRecipeId */}
+                {/* <p>Display comments for Recipe ID: {selectedRecipeId}</p>
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-secondary" onClick={handleCloseModal}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )} */}
+      
     </div>
   );
 };
