@@ -53,7 +53,7 @@ public class RecipeCommentController {
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteComment(@PathVariable("id") Long commentId){
         recipeCommentService.deleteComment(commentId);
-        return ResponseEntity.ok("Comment dleted successfully!");
+        return ResponseEntity.ok("Comment deleted successfully!");
     }
 
 }

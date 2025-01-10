@@ -23,4 +23,8 @@ public class RecipeComment {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe; // Reference to the Recipe entity
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user; // Reference to the User entity
+
 }

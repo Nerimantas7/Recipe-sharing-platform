@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Assign default roles
         Role userRole = roleRepository.findByName(RoleType.ROLE_USER);
-//                .orElseThrow(() -> new ResourceNotFoundException("Default role not found!"));
+
         user.getRoles().add(userRole);
 
         userRepository.save(user);
@@ -89,19 +89,6 @@ public class AuthServiceImpl implements AuthService {
                         .findFirst()
                         .map(Role::getName))
                 .orElse(null);
-
-//        Optional<User> userOptional = userRepository.findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail());
-//
-//        String role = null;
-//        if(userOptional.isPresent()){
-//            User loggeInUser = userOptional.get();
-//            Optional<Role> optionalRole = loggeInUser.getRoles().stream().findFirst();
-//
-//            if(optionalRole.isPresent()){
-//                Role userRole = optionalRole.get();
-//                role = userRole.getName().name();
-//            }
-//        }
 
         JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
         jwtAuthResponse.setRole(roleType);

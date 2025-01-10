@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listRecipes } from "../services/RecipeService";
 import { useNavigate } from "react-router-dom";
+import { isUserLoggedIn } from "../services/AuthService";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -9,6 +10,8 @@ const ListRecipeComponent = () => {
   const [recipes, setRecipes] = useState([]);
 
   const navigator = useNavigate();
+
+  const isAuth = isUserLoggedIn();
 
   useEffect(() => {
     listRecipes()
@@ -27,20 +30,21 @@ const ListRecipeComponent = () => {
     navigator(`/edit-recipe/${id}`); //must be backtick symbols
   }
 
-  function removeRecipe(id){
+  function removeRecipe(id) {
     console.log(id);
 
-    if(window.confirm('Are you sure you want to delete this recipe?')){
-    deleteRecipe(id).then((response) => {
-        getAllRecipes();
-
-    }).catch(error =>{
-        console.error(error);
-    });
-}else{
-    console.log('Delete operation cancelled');
-}
-}
+    if (window.confirm("Are you sure you want to delete this recipe?")) {
+      deleteRecipe(id)
+        .then((response) => {
+          getAllRecipes();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.log("Delete operation cancelled");
+    }
+  }
 
   return (
     <div>
@@ -64,12 +68,15 @@ const ListRecipeComponent = () => {
                 <h5 className="card-title">{recipe.recipeName}</h5>
                 <p className="card-text">{recipe.recipeIngredients}</p>
                 <p className="card-text">{recipe.recipeSteps}</p>
-                <button
-                  className="btn btn-outline-secondary"
-                  onClick={() => handleShowModal(recipe)}
-                >
-                  Write a comment
-                </button>
+
+                {isAuth && (
+                  <button
+                    className="btn btn-outline-secondary"
+                    onClick={() => handleShowModal(recipe)}
+                  >
+                    Write a comment
+                  </button>
+                )}
                 <button
                   className="btn btn-outline-secondary mx-3"
                   onClick={() => handleShowModal(recipe)}
@@ -78,24 +85,24 @@ const ListRecipeComponent = () => {
                 </button>
               </div>
 
-              {/* {isAdmin && ( */}
-              <div className="card-footer">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary"
-                  onClick={() => updateRecipe(recipe.id)}
-                >
-                  Update
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary mx-3"
-                  onClick={() => removeRecipe(recipe.id)}
-                >
-                  Delete
-                </button>
-              </div>
-              {/* )} */}
+              {isAuth && (
+                <div className="card-footer">
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={() => updateRecipe(recipe.id)}
+                  >
+                    Update
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary mx-3"
+                    onClick={() => removeRecipe(recipe.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
             </div>
           </div>
           // </div>

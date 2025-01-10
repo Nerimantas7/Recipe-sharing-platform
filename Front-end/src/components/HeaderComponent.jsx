@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { isAdminUser, isUserLoggedIn, logout } from "../services/AuthService";
 
 const Header = () => {
+
   const isAuth = isUserLoggedIn();
 
   const navigator = useNavigate();
@@ -19,7 +20,7 @@ const Header = () => {
       <header className="header">
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
-            <a className="navbar-brand" href="#">
+            <a className="navbar-brand" href="/">
               Recipe Sharing Platform
             </a>
             <button

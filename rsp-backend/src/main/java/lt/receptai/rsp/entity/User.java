@@ -47,4 +47,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<RecipeLike> recipeLikes = new HashSet<>(); // Recipes liked or disliked by the user
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RecipeComment> recipeComments = new HashSet<>();
 }
