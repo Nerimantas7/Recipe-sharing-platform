@@ -1,19 +1,16 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { createComment, updateComment } from "../services/CommentService";
 
-const CommentComponent = () => {
+import PropTypes from "prop-types";
+
+const CommentComponent = ({ id, onClose, onSuccess }) => {
   const [recipeComment, setRecipeComment] = useState("");
 
-  const [errors, setErrors] = useState({ recipeComment: "" });
-
-  const { id } = useParams();
-
-  const navigator = useNavigate();
+  const [errors, setErrors] = useState({ recipeComment: "" });  
 
   // Function to save added or updated data from form
-  function saveOrUpdateComment(e) {
+  const saveOrUpdateComment = (e) => {
     e.preventDefault();
 
     if (validateForm()) {
@@ -22,13 +19,13 @@ const CommentComponent = () => {
 
       if (id) {
         // Add a confirmation dialog
-        if (window.confirm("Are you sure to update this comment?")) {
+        if (window.confirm("Are you sure you want to update this comment?")) {
           console.log(comment);
 
           updateComment(id, comment)
             .then((response) => {
               console.log("Comment updated:", response.data);
-              navigator("/recipes");
+              onSuccess();
             })
             .catch((error) => {
               console.error("Error updating comment:", error);
@@ -39,13 +36,13 @@ const CommentComponent = () => {
         }
       } else {
         // Add a confirmation dialog
-        if (window.confirm("Are you want to save this comment?")) {
+        if (window.confirm("Do you want to save this comment?")) {
           console.log(comment);
 
           createComment(comment)
             .then((response) => {
               console.log("Comment created:", response.data);
-              navigator("/recipes");
+              onSuccess();
             })
             .catch((error) => {
               console.error("Error creating comment:", error);
@@ -56,7 +53,7 @@ const CommentComponent = () => {
         }
       }
     }
-  }
+  };
 
   // Function to check the form data
   function validateForm() {
@@ -69,24 +66,25 @@ const CommentComponent = () => {
     return Object.keys(errorsCopy).length === 0;
   }
 
-  const handleCancel = () => {
-    navigator("/recipes");
-  };
-
   return (
-    <div className="modal-backdrop">
-      <div className="modal">
+    <div className="modal-backdrop" aria-hidden="true">
+      <div className="modal" role="dialog" aria-labelledby="commentModalTitle">
         <div className="modal-header">
-          <h5 className="modal-title">Recipe Comment</h5>
+          <h5 id="commentModalTitle" className="modal-title">
+            {id ? "Update Comment" : "Add Comment"}
+          </h5>
           <button
             type="button"
             className="btn-close"
-            onClick={handleCancel}
+            onClick={onClose}
           ></button>
         </div>
         <div className="modal-body">
-          <label className="form-label">Comment:</label>
+          <label htmlFor="commentInput" className="form-label">
+            Comment:
+          </label>
           <input
+            id="commentInput"
             type="text"
             placeholder="Enter comment"
             name="recipeComment"
@@ -102,13 +100,19 @@ const CommentComponent = () => {
           <button className="btn btn-primary" onClick={saveOrUpdateComment}>
             Submit
           </button>
-          <button className="btn btn-secondary" onClick={handleCancel}>
+          <button className="btn btn-secondary" onClick={onClose}>
             Cancel
           </button>
         </div>
       </div>
     </div>
   );
+};
+
+CommentComponent.propTypes = {
+  id: PropTypes.string, // For update use case
+  onClose: PropTypes.func.isRequired, // Function to close the modal
+  onSuccess: PropTypes.func.isRequired, // Function to refresh parent state on success
 };
 
 export default CommentComponent;

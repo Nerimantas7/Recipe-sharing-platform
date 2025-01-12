@@ -21,18 +21,22 @@ const ListRecipeComponent = () => {
   const isAuth = isUserLoggedIn();
 
   useEffect(() => {
+    fetchRecipes();
+  }, []);
+
+  const fetchRecipes = () => {
     listRecipes()
       .then((response) => {
         setRecipes(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Error fetching recipes:", error);
       });
-  }, []);
+  };
 
-  function updateRecipe(id) {
-    navigator(`/edit-recipe/${id}`); //must be backtick symbols
-  }
+  // function updateRecipe(id) {
+  //   navigator(`/edit-recipe/${id}`); //must be backtick symbols
+  // }
 
   function removeRecipe(id) {
     console.log(id);
@@ -64,6 +68,10 @@ const ListRecipeComponent = () => {
     setShowCommentModal(false);
     setShowCommentsModal(false);
     setSelectedRecipeId(null);
+  };
+
+  const refreshComments = () => {
+    fetchRecipes(); // Refresh the recipes list
   };
 
   return (
@@ -110,7 +118,7 @@ const ListRecipeComponent = () => {
                   <button
                     type="button"
                     className="btn btn-outline-secondary"
-                    onClick={() => updateRecipe(recipe.id)}
+                    onClick={() => navigator(`/edit-recipe/${recipe.id}`)}
                   >
                     Update
                   </button>
@@ -131,19 +139,14 @@ const ListRecipeComponent = () => {
 
       {/* Modal for Adding Comments */}
       {showCommentModal && (
-        <div className="modal show d-block">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <CommentComponent recipeId={selectedRecipeId} />
-              <button
-                className="btn btn-secondary mt-3"
-                onClick={handleCloseModal}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
+        <CommentComponent
+        id={selectedRecipeId?.toString()}
+        onClose={handleCloseModal}
+        onSuccess={() => {
+          setShowCommentModal(false);
+          refreshComments(); // Function to refresh comments
+        }}
+      />
       )}
 
       {/* Modal for Reading Comments */}

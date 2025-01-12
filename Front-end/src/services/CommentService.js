@@ -10,16 +10,18 @@ axios.interceptors.request.use(function (config) {
 
     return config;
 
-  }, function (error) {
-    
+}, function (error) {
+
     return Promise.reject(error);
-  });
+});
 
 export const getAllComments = () => axios.get(COMMENT_REST_API_BASE_URL);
 
-export const createComment = (comment) => axios.post(COMMENT_REST_API_BASE_URL, comment);
+export const createComment = (comment, recipeId) => axios.post(COMMENT_REST_API_BASE_URL + '/recipe/' + recipeId, comment, recipeId);
 
 export const getCommentById = (commentId) => axios.get(COMMENT_REST_API_BASE_URL + '/' + commentId);
+
+export const getCommentsByRecipeId = (recipeId) => axios.get(COMMENT_REST_API_BASE_URL + '/recipe/' + recipeId);
 
 export const updateComment = (commentId, comment) => axios.put(COMMENT_REST_API_BASE_URL + '/' + commentId, comment);
 

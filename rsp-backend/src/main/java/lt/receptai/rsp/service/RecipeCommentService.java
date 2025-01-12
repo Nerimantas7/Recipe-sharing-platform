@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RecipeCommentService {
 
-    RecipeCommentDto addComment(RecipeCommentDto recipeCommentDto);
+    RecipeCommentDto addComment(Long recipeId, RecipeCommentDto recipeCommentDto);
 
     RecipeCommentDto getCommentById(Long commentId);
 

@@ -3,10 +3,12 @@ package lt.receptai.rsp.service.impl;
 import lombok.AllArgsConstructor;
 import lt.receptai.rsp.dto.RecipeCategoryDto;
 import lt.receptai.rsp.dto.RecipeCommentDto;
+import lt.receptai.rsp.entity.Recipe;
 import lt.receptai.rsp.entity.RecipeCategory;
 import lt.receptai.rsp.entity.RecipeComment;
 import lt.receptai.rsp.exception.ResourceNotFoundException;
 import lt.receptai.rsp.repository.RecipeCommentRepository;
+import lt.receptai.rsp.repository.RecipeRepository;
 import lt.receptai.rsp.service.RecipeCommentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -20,19 +22,25 @@ public class RecipeCommentServiceImpl implements RecipeCommentService {
 
     private RecipeCommentRepository recipeCommentRepository;
 
+    private RecipeRepository recipeRepository;
+
     private ModelMapper modelMapper;
 
     @Override
-    public RecipeCommentDto addComment(RecipeCommentDto recipeCommentDto) {
+    public RecipeCommentDto addComment(Long recipeId, RecipeCommentDto recipeCommentDto) {
+
+        // Fetch the Recipe entity using the provided recipeId
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Recipe not found with ID: " + recipeId));
 
         //convert Recipe Comment Dto into Recipe Comment Jpa entity
         RecipeComment recipeComment = modelMapper.map(recipeCommentDto, RecipeComment.class);
+        recipeComment.setRecipe(recipe);
 
-        //Recipe Comment Jpa entity
+        // Save RecipeComment Jpa entity
         RecipeComment savedComment = recipeCommentRepository.save(recipeComment);
 
         //Convert saved Recipe Comment Jpa entity object into Recipe Comment Dto entity
-
         return modelMapper.map(savedComment, RecipeCommentDto.class);
     }
 

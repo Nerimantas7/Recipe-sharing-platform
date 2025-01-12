@@ -28,7 +28,7 @@ public class RecipeCategoryController {
 
         RecipeCategoryDto savedCategory = recipeCategoryService.addCategory(recipeCategoryDto);
         System.out.println("Category added successfully: " + savedCategory.getRecipeCategory());
-        return  new ResponseEntity<>(savedCategory, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedCategory, HttpStatus.CREATED);
     }
 
     //Build Get Category REST API
