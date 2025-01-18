@@ -37,9 +37,11 @@ public class SpringSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf((csrf) -> csrf.disable())
+                .cors(Customizer.withDefaults())
                 .headers(headers -> headers.frameOptions().sameOrigin())
                 .authorizeHttpRequests((authorize) ->{
                     authorize.requestMatchers("/api/auth/**").permitAll();
+                    authorize.requestMatchers("/api/recipes/**").permitAll();
                     authorize.requestMatchers("/h2-console/**").permitAll(); // allows to achieve H2-console
                     authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 

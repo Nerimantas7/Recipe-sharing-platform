@@ -33,7 +33,6 @@ public class RecipeController {
     }
 
     //Build Get Recipe REST API
-    @PreAuthorize("hasAnyRole('ADMIN','USER','QUEST')") //?
     @GetMapping("{id}")
     public ResponseEntity<RecipeDto> getRecipeById(@PathVariable("id") Long recipeId){
         RecipeDto recipeDto = recipeService.getRecipeById(recipeId);
@@ -41,7 +40,6 @@ public class RecipeController {
     }
 
     // Build Get All Recipes REST API with Pagination
-    @PreAuthorize("hasAnyRole('ADMIN','USER','QUEST')") //?
     @GetMapping
     public ResponseEntity<List<RecipeDto>> getAllRecipes(@RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size){
@@ -66,18 +64,4 @@ public class RecipeController {
         recipeService.deleteRecipe(recipeId);
         return ResponseEntity.ok("Recipe deleted successfully!");
     }
-
-    //Optional:
-    // Upload Recipe Image
-//    @PostMapping(value = "/upload/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<String> uploadImage(
-//            @PathVariable("id") Long recipeId,
-//            @RequestParam("file") MultipartFile file) {
-//        try {
-//            recipeService.uploadRecipeImage(recipeId, file);
-//            return ResponseEntity.ok("Image uploaded successfully!");
-//        } catch (IOException ex) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading image");
-//        }
-//    }
 }
