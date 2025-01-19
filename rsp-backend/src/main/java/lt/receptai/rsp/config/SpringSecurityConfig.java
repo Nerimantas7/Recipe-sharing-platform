@@ -42,8 +42,11 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests((authorize) ->{
                     authorize.requestMatchers("/api/auth/**").permitAll();
                     authorize.requestMatchers("/api/recipes/**").permitAll();
+                    authorize.requestMatchers("/api/categories/**").permitAll();
                     authorize.requestMatchers("/h2-console/**").permitAll(); // allows to achieve H2-console
                     authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+
+                    authorize.requestMatchers("/api/categories/add-category").hasRole("ADMIN");
 
 //                    authorize.anyRequest().permitAll();
                     authorize.anyRequest().authenticated();

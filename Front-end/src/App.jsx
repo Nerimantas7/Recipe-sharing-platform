@@ -11,7 +11,6 @@ import LoginComponent from "./components/LoginComponent";
 import { isUserLoggedIn } from "./services/AuthService";
 
 function App() {
-  
   function AuthenticatedRoute({ children }) {
     const isAuth = isUserLoggedIn();
 
@@ -57,11 +56,22 @@ function App() {
             element={<ListCategoriesComponent />}
           ></Route>
           {/* http://localhost:5173/add-category - pakeisti porta*/}
-          <Route path="/add-category" element={<CategoryComponent />}></Route>
+          <Route
+            path="/add-category"
+            element={
+              <AuthenticatedRoute>
+                <CategoryComponent />
+              </AuthenticatedRoute>
+            }
+          ></Route>
           {/* http://localhost:5173/edit-category/1 - pakeisti porta*/}
           <Route
             path="/edit-category/:id"
-            element={<CategoryComponent />}
+            element={
+              <AuthenticatedRoute>
+                <CategoryComponent />
+              </AuthenticatedRoute>
+            }
           ></Route>
           {/* http://localhost:5173/register - pakeisti porta*/}
           <Route path="/register" element={<RegisterComponent />}></Route>

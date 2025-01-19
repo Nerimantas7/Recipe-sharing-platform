@@ -29,7 +29,7 @@ public class JwtTokenProvider {
             byte[] hash = java.security.MessageDigest.getInstance("SHA-256").digest(dateBytes);
 
             // Return the hash as a Base64-encoded string
-            return java.util.Base64.getEncoder().encodeToString(hash);
+            return java.util.Base64.getEncoder().encodeToString(hash).replace("\n", "").replace("\r", "");
         } catch (java.security.NoSuchAlgorithmException e) {
             // Throw a runtime exception if SHA-256 is not supported (unlikely)
             throw new RuntimeException("SHA-256 algorithm not found", e);
@@ -56,13 +56,12 @@ public class JwtTokenProvider {
                 .compact();
         System.out.println("Token generated");
         return token;
-
     }
 
     private Key key(){
         String jwtSecret = generateDailySecret();
         return Keys.hmacShaKeyFor(
-                Decoders.BASE64.decode(jwtSecret)
+                Decoders.BASE64.decode(jwtSecret.replace("\n", "").replace("\r", ""))
         );
     }
 

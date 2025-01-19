@@ -32,7 +32,6 @@ public class RecipeCategoryController {
     }
 
     //Build Get Category REST API
-    @PreAuthorize("hasAnyRole('ADMIN','USER','QUEST')") //?
     @GetMapping("{id}")
     public ResponseEntity<RecipeCategoryDto> getCategoryById(@PathVariable("id") Long categoryId){
         RecipeCategoryDto recipeCategoryDto = recipeCategoryService.getCategoryById(categoryId);
@@ -40,7 +39,6 @@ public class RecipeCategoryController {
     }
 
     // Build Get All Recipes Categories REST API
-    @PreAuthorize("hasAnyRole('ADMIN','USER','QUEST')") // ?
     @GetMapping
     public ResponseEntity<List<RecipeCategoryDto>> getAllCategories(){
 

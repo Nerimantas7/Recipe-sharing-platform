@@ -43,9 +43,10 @@ const RecipeComponent = () => {
     getAllCategories()
       .then((response) => {
         setCategories(response.data);
+        console.log("Categories for recipe got");
       })
       .catch((error) => {
-        console.error(error);
+        console.error("Category for recipe not got", error);
       });
   }, [id]);
 
@@ -71,7 +72,7 @@ const RecipeComponent = () => {
           updateRecipe(id, recipe)
             .then((response) => {
               console.log(response.data);
-              navigator("/recipes"); //not exist yet
+              navigator(`/edit-recipe/${id}`); 
             })
             .catch((error) => {
               console.error(error);
@@ -87,7 +88,7 @@ const RecipeComponent = () => {
           createRecipe(recipe)
             .then((response) => {
               console.log(response.data);
-              navigator("/recipes");
+              navigator("/add-recipe");
             })
             .catch((error) => {
               console.error(error);
