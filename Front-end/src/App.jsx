@@ -14,6 +14,8 @@ function App() {
   function AuthenticatedRoute({ children }) {
     const isAuth = isUserLoggedIn();
 
+    console.log("User authenticated:", isAuth);
+
     if (isAuth) {
       return children;
     }

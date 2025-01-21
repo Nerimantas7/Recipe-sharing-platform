@@ -42,7 +42,7 @@ const RecipeComponent = () => {
 
     getAllCategories()
       .then((response) => {
-        setCategories(response.data);
+        setCategories(response.data || []);
         console.log("Categories for recipe got");
       })
       .catch((error) => {

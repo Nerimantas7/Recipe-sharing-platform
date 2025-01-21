@@ -25,17 +25,17 @@ const CategoryComponent = () => {
         console.error("Error fetching category:", error);
         navigator("/categories");
       });
-  }, [id, navigator]);
+  }, [id]);
 
   function saveOrUpdateCategory(e) {
     e.preventDefault();
 
+    const category = { recipeCategory, categoryDescription };
+
     if (!recipeCategory.trim() || !categoryDescription.trim()) {
       alert("Both fields are required.");
       return;
-    }
-
-    const category = { recipeCategory, categoryDescription };
+    }    
 
     console.log(category);
 
@@ -43,7 +43,7 @@ const CategoryComponent = () => {
       updateCategory(id, category)
         .then((response) => {
           console.log(response.data);
-          navigator(`/edit-category/${id}`);
+          navigator(`/categories`);
         })
         .catch((error) => {
           console.error("Error updating category:", error);

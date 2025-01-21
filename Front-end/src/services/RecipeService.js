@@ -4,16 +4,21 @@ import { getToken } from "./AuthService";
 const REST_API_BASE_URL = "http://localhost:8080/api/recipes";
 
 // Add a request interceptor
-axios.interceptors.request.use(function (config) {
-
-    config.headers['Authorization'] = getToken();
-
+axios.interceptors.request.use(
+  function (config) {
+    const token = getToken();
+    if (token) {
+      console.log("Token being sent:", token); // Debugging log
+      config.headers['Authorization'] = getToken();
+    }
     return config;
-
-  }, function (error) {
-    
+  },
+  function (error) {
+    console.error("Request Error:", error);
     return Promise.reject(error);
-  });
+  }
+);
+
 
 export const listRecipes = () => axios.get(REST_API_BASE_URL);
 

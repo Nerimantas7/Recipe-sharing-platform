@@ -26,13 +26,17 @@ public class JwtTokenProvider {
             byte[] dateBytes = dateString.getBytes();
 
             // Compute the SHA-256 hash of the date bytes
-            byte[] hash = java.security.MessageDigest.getInstance("SHA-256").digest(dateBytes);
+            byte[] hash = java.security.MessageDigest.getInstance("SHA-512").digest(dateBytes);
+
+            // Use the first 48 bytes (384 bits) for the key
+            byte[] truncatedHash = new byte[48];
+            System.arraycopy(hash, 0, truncatedHash, 0, 48);
 
             // Return the hash as a Base64-encoded string
-            return java.util.Base64.getEncoder().encodeToString(hash).replace("\n", "").replace("\r", "");
+            return java.util.Base64.getEncoder().encodeToString(truncatedHash).replace("\n", "").replace("\r", "");
         } catch (java.security.NoSuchAlgorithmException e) {
-            // Throw a runtime exception if SHA-256 is not supported (unlikely)
-            throw new RuntimeException("SHA-256 algorithm not found", e);
+            // Throw a runtime exception if SHA-512 is not supported (unlikely)
+            throw new RuntimeException("SHA-512 algorithm not found", e);
         }
     }
 
@@ -52,14 +56,15 @@ public class JwtTokenProvider {
                 .setSubject(username)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
-                .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret)))
+                .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret)), io.jsonwebtoken.SignatureAlgorithm.HS384)
                 .compact();
-        System.out.println("Token generated");
+        System.out.println("Token being generated: " + token);
         return token;
     }
 
     private Key key(){
         String jwtSecret = generateDailySecret();
+        System.out.println("Key used for JWT: " + jwtSecret);
         return Keys.hmacShaKeyFor(
                 Decoders.BASE64.decode(jwtSecret.replace("\n", "").replace("\r", ""))
         );
@@ -74,19 +79,25 @@ public class JwtTokenProvider {
                 .getBody();
 
         String username = claims.getSubject();
-
+        System.out.println("Username returned");
         return username;
     }
 
     //Validate JWT token
 
-    public boolean validateToken(String token){
-        Jwts.parser()
-                .setSigningKey(key())
-                .build()
-                .parse(token);
-
-        return true;
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser()
+                    .setSigningKey(key()) // Ensure correct key is used
+                    .build()
+                    .parseClaimsJws(token); // Parses and validates the token
+            System.out.println("Token validated successfully.");
+            return true;
+        } catch (Exception e) {
+            System.err.println("Token validation failed: " + e.getMessage());
+            return false;
+        }
     }
+
 
 }

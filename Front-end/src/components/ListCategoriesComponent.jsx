@@ -45,11 +45,11 @@ const ListCategoriesComponent = () => {
     <div className="container">
       <h2 className="text-center my-4">List of Categories</h2>
 
-      {isAdmin && (
+      {isAdmin && 
         <Link to="/add-category" className="btn btn-outline-secondary mb-2">
           Add Category
         </Link>
-      )}
+      }
 
       <table className="table table-striped table-bordered">
         <thead>
@@ -61,31 +61,31 @@ const ListCategoriesComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {categories.map((category) => (
+          {categories.map(category => 
             <tr key={category.id}>
               <td>{category.id}</td>
               <td>{category.recipeCategory}</td>
               <td>{category.categoryDescription}</td>
               <td>
-                {isAdmin && (
+                {isAdmin && 
                   <button
                     className="btn btn-outline-success"
                     onClick={() => updateCategory(category.id)}
                   >
                     Update
                   </button>
-                )}
-                {isAdmin && (
+                }
+                {isAdmin && 
                   <button
                     className="btn btn-outline-danger mx-3"
                     onClick={() => removeCategory(category.id)}
                   >
                     Delete
                   </button>
-                )}
+                }
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
