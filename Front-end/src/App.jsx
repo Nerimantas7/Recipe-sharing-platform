@@ -11,6 +11,7 @@ import LoginComponent from "./components/LoginComponent";
 import { isUserLoggedIn } from "./services/AuthService";
 
 function App() {
+
   function AuthenticatedRoute({ children }) {
     const isAuth = isUserLoggedIn();
 
@@ -68,7 +69,7 @@ function App() {
           ></Route>
           {/* http://localhost:5173/edit-category/1 - pakeisti porta*/}
           <Route
-            path="/edit-category/:id"
+            path='/edit-category/:id'
             element={
               <AuthenticatedRoute>
                 <CategoryComponent />

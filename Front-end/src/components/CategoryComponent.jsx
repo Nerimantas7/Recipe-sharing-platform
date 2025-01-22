@@ -7,12 +7,12 @@ import {
 } from "../services/CategoryService";
 
 const CategoryComponent = () => {
-  const navigator = useNavigate();
+  const [recipeCategory, setRecipeCategory] = useState("");
+  const [categoryDescription, setCategoryDescription] = useState("");
 
   const { id } = useParams();
 
-  const [recipeCategory, setRecipeCategory] = useState("");
-  const [categoryDescription, setCategoryDescription] = useState("");
+  const navigator = useNavigate();
 
   useEffect(() => {
     getCategoryById(id)
@@ -23,7 +23,6 @@ const CategoryComponent = () => {
       })
       .catch((error) => {
         console.error("Error fetching category:", error);
-        navigator("/categories");
       });
   }, [id]);
 
@@ -35,7 +34,7 @@ const CategoryComponent = () => {
     if (!recipeCategory.trim() || !categoryDescription.trim()) {
       alert("Both fields are required.");
       return;
-    }    
+    }
 
     console.log(category);
 
@@ -43,7 +42,7 @@ const CategoryComponent = () => {
       updateCategory(id, category)
         .then((response) => {
           console.log(response.data);
-          navigator(`/categories`);
+          navigator("/categories");
         })
         .catch((error) => {
           console.error("Error updating category:", error);
@@ -64,13 +63,19 @@ const CategoryComponent = () => {
     navigator("/categories");
   };
 
-  const pageTitle = id ? "Update Category" : "Add Category";
+  function pageTitle() {
+    if (id) {
+      return <h2 className="text-center pt-2">Update Category</h2>;
+    } else {
+      return <h2 className="text-center pt-2">Add Category</h2>;
+    }
+  }
 
   return (
     <div className="container my-4">
       <div className="row">
         <div className="card col-md-6 offset-md-3 offset-md-3">
-          <h2 className="text-center pt-2">{pageTitle}</h2>
+          {pageTitle()}
           <div className="card-body">
             <form>
               <div className="form-group mb-2">
@@ -79,9 +84,9 @@ const CategoryComponent = () => {
                   type="text"
                   name="recipeCategory"
                   placeholder="Enter Category Name"
-                  value={recipeCategory}
-                  onChange={(e) => setRecipeCategory(e.target.value)}
                   className="form-control"
+                  value={recipeCategory}
+                  onChange={(e) => setRecipeCategory(e.target.value)}                  
                 ></input>
               </div>
 

@@ -21,7 +21,6 @@ public class RecipeCategoryController {
     private RecipeCategoryService recipeCategoryService;
 
     //Build Add Category REST API
-
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<RecipeCategoryDto> addCategory(@Valid @RequestBody RecipeCategoryDto recipeCategoryDto){
@@ -32,6 +31,7 @@ public class RecipeCategoryController {
     }
 
     //Build Get Category REST API
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("{id}")
     public ResponseEntity<RecipeCategoryDto> getCategoryById(@PathVariable("id") Long categoryId){
         RecipeCategoryDto recipeCategoryDto = recipeCategoryService.getCategoryById(categoryId);
@@ -39,6 +39,7 @@ public class RecipeCategoryController {
     }
 
     // Build Get All Recipes Categories REST API
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<List<RecipeCategoryDto>> getAllCategories(){
 

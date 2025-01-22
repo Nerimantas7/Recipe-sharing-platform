@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { deleteCategory, getAllCategories } from "../services/CategoryService";
 import { Link, useNavigate } from "react-router-dom";
 import { isAdminUser } from "../services/AuthService";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const ListCategoriesComponent = () => {
   const [categories, setCategories] = useState([]);
@@ -18,38 +20,42 @@ const ListCategoriesComponent = () => {
     getAllCategories()
       .then((response) => {
         console.log("Fetched categories", response.data);
-        setCategories(response.data || []);
+        setCategories(response.data || []);        
       })
       .catch((error) => {
-        console.log("Error fetching categories:");
-        console.error(error);
+        console.error("Error fetching categories:", error);
       });
   }
 
-  function updateCategory(id) {
+  const updateCategory = (id) => {
     navigator(`/edit-category/${id}`);
-  }
+  };
 
-  function removeCategory(id) {
-    deleteCategory(id)
-      .then((response) => {
-        console.log(response.data);
-        listOfCategories();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+  const removeCategory = (id) => {
+    console.log(id);
+    if (window.confirm("Are you sure you want to delete this category?")) {
+      deleteCategory(id)
+        .then((response) => {
+          console.log(response.data);
+          listOfCategories();
+        })
+        .catch((error) => {
+          console.error("Error remove category:",error);
+        });
+    } else {
+      console.log("Delete operation cancelled");
+    }
+  };
 
   return (
     <div className="container">
       <h2 className="text-center my-4">List of Categories</h2>
 
-      {isAdmin && 
+      {isAdmin && (
         <Link to="/add-category" className="btn btn-outline-secondary mb-2">
           Add Category
         </Link>
-      }
+      )}
 
       <table className="table table-striped table-bordered">
         <thead>

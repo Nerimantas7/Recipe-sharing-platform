@@ -34,17 +34,18 @@ const ListRecipeComponent = () => {
       });
   };
 
-  // function updateRecipe(id) {
-  //   navigator(`/edit-recipe/${id}`); //must be backtick symbols
-  // }
+  const updateRecipe=(id)=> {
+    navigator(`/edit-recipe/${id}`); //must be backtick symbols
+  }
 
-  function removeRecipe(id) {
+  const removeRecipe = (id) => {
     console.log(id);
 
     if (window.confirm("Are you sure you want to delete this recipe?")) {
       deleteRecipe(id)
-        .then(() => {
-          getAllRecipes();
+        .then((response) => {
+          console.log(response.data);
+          fetchRecipes();
         })
         .catch((error) => {
           console.error(error);
@@ -77,7 +78,7 @@ const ListRecipeComponent = () => {
   return (
     <div>
       <div className="row row-cols-1 row-cols-md-3 g-1 mx-4 my-3">
-        {recipes.map((recipe) => (
+        {recipes.map(recipe => 
           <div
             key={recipe.id}
             className="card mb-3 mx-auto"
@@ -118,7 +119,7 @@ const ListRecipeComponent = () => {
                   <button
                     type="button"
                     className="btn btn-outline-secondary"
-                    onClick={() => navigator(`/edit-recipe/${recipe.id}`)}
+                    onClick={() => updateRecipe(recipe.id)}
                   >
                     Update
                   </button>
@@ -134,7 +135,7 @@ const ListRecipeComponent = () => {
             </div>
           </div>
           // </div>
-        ))}
+        )}
       </div>
 
       {/* Modal for Adding Comments */}
