@@ -11,6 +11,7 @@ const ListCategoriesComponent = () => {
   const navigator = useNavigate();
 
   const isAdmin = isAdminUser();
+  console.log("Is Admin:", isAdmin);
 
   useEffect(() => {
     listOfCategories();

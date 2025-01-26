@@ -15,6 +15,7 @@ const CategoryComponent = () => {
   const navigator = useNavigate();
 
   useEffect(() => {
+    if (id) {
     getCategoryById(id)
       .then((response) => {
         setRecipeCategory(response.data.recipeCategory);
@@ -24,6 +25,7 @@ const CategoryComponent = () => {
       .catch((error) => {
         console.error("Error fetching category:", error);
       });
+    }
   }, [id]);
 
   function saveOrUpdateCategory(e) {
