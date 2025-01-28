@@ -28,11 +28,12 @@ const CommentComponent = () => {
     if (id) {
       getCommentById(id)
         .then((response) => {
-          setRecipeComment(response.data.recipeComment);
-          setRecipeId(response.data.recipeId);
-          setUserId(response.data.userId);
-          setCreatedAt(response.data.createdAt);
-          setUpdatedAt(response.data.updatedAt);
+          const { recipeComment, recipeId, userId, createdAt, updatedAt } = response.data;
+          setRecipeComment(recipeComment);
+          setRecipeId(recipeId);
+          setUserId(userId);
+          setCreatedAt(createdAt);
+          setUpdatedAt(updatedAt);
         })
         .catch((error) => {
           console.error("Error fetching comment: ", error);
@@ -50,26 +51,32 @@ const CommentComponent = () => {
   function saveOrUpdateComment(e) {
     e.preventDefault();
 
-    const comment = { recipeComment, recipeId, userId, createdAt, updatedAt };
+    if (!recipeComment.trim()) {
+      alert("Comment cannot be empty");
+      return;
+    }
+    const currentTimestamp = new Date().toISOString();
 
     if (validateForm()) {
       // Add form validation check
-      const comment = { recipeComment, userName };
+      const comment = {
+        recipeComment,
+        recipeId: recipeId,
+        userId: userId,
+        createdAt: id ? undefined : currentTimestamp,
+        updatedAt: currentTimestamp,
+      };
 
-      if (!recipeComment.trim()) {
-        alert("Comment cannot be empty");
-        return;
-      }
-
-      console.log(recipeComment);
+      console.log("Comment data:", comment);
 
       if (id) {
         // Add a confirmation dialog
         if (window.confirm("Are you sure to update this comment?")) {
-          console.log(comment);
-
           updateComment(id, comment)
             .then((response) => {
+              const { recipeId: updatedRecipeId = recipeId, userId: updatedUserId = userId } = response.data || {};              
+              comment.recipeId = updatedRecipeId;
+              comment.userId = updatedUserId;
               console.log("Comment updated:", response.data);
               navigator("/recipes");
             })
@@ -83,8 +90,6 @@ const CommentComponent = () => {
       } else {
         // Add a confirmation dialog
         if (window.confirm("Are you want to save this comment?")) {
-          console.log(comment);
-
           createComment(comment)
             .then((response) => {
               console.log("Comment created:", response.data);
@@ -112,15 +117,25 @@ const CommentComponent = () => {
     return Object.keys(errorsCopy).length === 0;
   }
 
-  // const handleCancel = () => {
-  //   navigator("/recipes");
-  // };
+  const handleCancel = () => {
+    setRecipeComment("");
+    setErrors({});
+    navigator("/recipes");
+  };
 
   function pageTitle() {
     if (id) {
-      return <h5 className="modal-title" id="staticBackdropLabel">Update Comment</h5>;
+      return (
+        <h5 className="modal-title" id="staticBackdropLabel">
+          Update Comment
+        </h5>
+      );
     } else {
-      return <h5 className="modal-title" id="staticBackdropLabel">Add Comment</h5>;
+      return (
+        <h5 className="modal-title" id="staticBackdropLabel">
+          Add Comment
+        </h5>
+      );
     }
   }
 
@@ -186,6 +201,7 @@ const CommentComponent = () => {
               type="button"
               className="btn btn-secondary"
               data-bs-dismiss="modal"
+              onClick={handleCancel}
             >
               Cancel
             </button>
@@ -193,7 +209,6 @@ const CommentComponent = () => {
         </div>
       </div>
     </div>
-    
   );
 };
 
