@@ -3,19 +3,17 @@ import { listRecipes } from "../services/RecipeService";
 import { useNavigate } from "react-router-dom";
 import { isUserLoggedIn } from "../services/AuthService";
 import CommentComponent from "../components/CommentComponent";
+import AllCommentsComponent from "./AllCommentsComponent";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const ListRecipeComponent = () => {
-
   const [recipes, setRecipes] = useState([]);
 
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
 
-  const [showCommentModal, setShowCommentModal] = useState(false);
-
-  const [showCommentsModal, setShowCommentsModal] = useState(false);
+  const [commentId, setCommentId] = useState(null); // For editing comments
 
   const navigator = useNavigate();
   const isAuth = isUserLoggedIn();
@@ -34,9 +32,9 @@ const ListRecipeComponent = () => {
       });
   };
 
-  const updateRecipe=(id)=> {
+  const updateRecipe = (id) => {
     navigator(`/edit-recipe/${id}`); //must be backtick symbols
-  }
+  };
 
   const removeRecipe = (id) => {
     console.log(id);
@@ -53,23 +51,7 @@ const ListRecipeComponent = () => {
     } else {
       console.log("Delete operation cancelled");
     }
-  }
-
-  const handleAddComment = (recipeId) => {
-    setSelectedRecipeId(recipeId);
-    setShowCommentModal(true);
-  };
-
-  const handleShowComments = (recipeId) => {
-    setSelectedRecipeId(recipeId);
-    setShowCommentsModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowCommentModal(false);
-    setShowCommentsModal(false);
-    setSelectedRecipeId(null);
-  };
+  };  
 
   const refreshComments = () => {
     fetchRecipes(); // Refresh the recipes list
@@ -78,98 +60,71 @@ const ListRecipeComponent = () => {
   return (
     <div>
       <div className="row row-cols-1 row-cols-md-3 g-1 mx-4 my-3">
-        {recipes.map(recipe => 
-          <div
-            key={recipe.id}
-            className="card mb-3 mx-auto"
-            style={{ maxWidth: "450px" }}
-          >
-            {/* <div className="row g-0">
-              <div className="col-md-4"> */}
-            <img
-              src={recipe.recipeImageUrl}
-              className="img-fluid rounded-start"
-              alt={recipe.recipeName}
-            />
-            {/* </div> */}
-            <div className="col-md-12">
-              <div className="card-body">
-                <h5 className="card-title">{recipe.recipeName}</h5>
-                <p className="card-text">{recipe.recipeIngredients}</p>
-                <p className="card-text">{recipe.recipeSteps}</p>
+        {recipes.map(
+          (recipe) => (
+            <div
+              key={recipe.id}
+              className="card mb-3 mx-auto"
+              style={{ maxWidth: "450px" }}
+            >              
+              <img
+                src={recipe.recipeImageUrl}
+                className="img-fluid rounded-start"
+                alt={recipe.recipeName}
+              />             
+              <div className="col-md-12">
+                <div className="card-body">
+                  <h5 className="card-title">{recipe.recipeName}</h5>
+                  <p className="card-text">{recipe.recipeIngredients}</p>
+                  <p className="card-text">{recipe.recipeSteps}</p>
 
-                {isAuth && (
-                  <button
-                    className="btn btn-outline-secondary"
-                    onClick={() => handleAddComment(recipe.id)}
-                  >
-                    Write a comment
-                  </button>
-                )}
-                <button
-                  className="btn btn-outline-secondary mx-3"
-                  onClick={() => handleShowComments(recipe.id)}
-                >
-                  Read comments
-                </button>
-              </div>
-
-              {isAuth && (
-                <div className="card-footer">
-                  <button
+                  {isAuth && (
+                    
+                    <button
                     type="button"
-                    className="btn btn-outline-secondary"
-                    onClick={() => updateRecipe(recipe.id)}
+                    className="btn btn-outline-secondary mx-3"
+                    data-bs-toggle="modal"
+                    data-bs-target="#writeComment"
                   >
-                    Update
-                  </button>
+                      Write a comment
+                    </button>
+                  )}
+                  <CommentComponent/>
+                  
                   <button
                     type="button"
                     className="btn btn-outline-secondary mx-3"
-                    onClick={() => removeRecipe(recipe.id)}
+                    data-bs-toggle="modal"
+                    data-bs-target="#readComments"
                   >
-                    Delete
+                    Read comments
                   </button>
+                  <AllCommentsComponent />
                 </div>
-              )}
+
+                {isAuth && (
+                  <div className="card-footer">
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => updateRecipe(recipe.id)}
+                    >
+                      Update
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary mx-3"
+                      onClick={() => removeRecipe(recipe.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-          // </div>
+          )          
         )}
-      </div>
-
-      {/* Modal for Adding Comments */}
-      {showCommentModal && (
-        <CommentComponent
-        id={selectedRecipeId?.toString()}
-        onClose={handleCloseModal}
-        onSuccess={() => {
-          setShowCommentModal(false);
-          refreshComments(); // Function to refresh comments
-        }}
-      />
-      )}
-
-      {/* Modal for Reading Comments */}
-      {/* {showCommentsModal && (
-        <div className="modal show d-block">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <h5 className="modal-title">Comments</h5>
-              <div className="modal-body"> */}
-                {/* Add logic to fetch and display comments for selectedRecipeId */}
-                {/* <p>Display comments for Recipe ID: {selectedRecipeId}</p>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={handleCloseModal}>
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )} */}
-      
+      </div>     
     </div>
   );
 };

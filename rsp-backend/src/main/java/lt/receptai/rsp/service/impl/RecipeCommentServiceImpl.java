@@ -13,6 +13,7 @@ import lt.receptai.rsp.service.RecipeCommentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,8 @@ public class RecipeCommentServiceImpl implements RecipeCommentService {
     @Override
     public RecipeCommentDto addComment(Long recipeId, RecipeCommentDto recipeCommentDto) {
 
+        recipeCommentDto.setCreatedAt(LocalDateTime.now());
+        recipeCommentDto.setUpdatedAt(LocalDateTime.now());
         // Fetch the Recipe entity using the provided recipeId
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipe not found with ID: " + recipeId));
@@ -71,7 +74,7 @@ public class RecipeCommentServiceImpl implements RecipeCommentService {
         RecipeComment comment = recipeCommentRepository.findById(commentId).
                 orElseThrow(() -> new ResourceNotFoundException("Comment not found with given id: " + commentId));
         comment.setRecipeComment(commentDto.getRecipeComment());
-
+        comment.setUpdatedAt(LocalDateTime.now()); // Update the timestamp
         RecipeComment updatedComment = recipeCommentRepository.save(comment);
         return modelMapper.map(updatedComment, RecipeCommentDto.class);
     }

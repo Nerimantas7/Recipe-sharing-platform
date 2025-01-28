@@ -81,6 +81,7 @@ function App() {
 
           {/* http://localhost:5173/login - pakeisti porta*/}
           <Route path="/login" element={<LoginComponent />}></Route>
+
         </Routes>
         <FooterComponent />
       </BrowserRouter>

@@ -46,7 +46,7 @@ const RecipeComponent = () => {
         console.log("Categories for recipe got");
       })
       .catch((error) => {
-        console.error("Category for recipe not got", error);
+        console.error("Failed to fetch category for the recipe.", error);
       });
   }, [id]);
 
