@@ -33,9 +33,14 @@ const LoginComponent = () => {
 
         const role = response.data.role;
 
+        const username = response.data.username;
+
+        const userId = response.data.userId;
+
         storeToken(token);
 
-        saveLoggedInUser(userNameOrEmail, role);
+        saveLoggedInUser(userNameOrEmail, role, username, userId);
+        
 
         navigator("/");
 

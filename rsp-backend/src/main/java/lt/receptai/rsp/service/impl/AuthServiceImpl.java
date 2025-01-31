@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -83,14 +84,23 @@ public class AuthServiceImpl implements AuthService {
         // Generate the JWT token
         String token = jwtTokenProvider.generateToken(authentication);
 
+        // Retrieve the user details
+        User user = userRepository.findByUsernameOrEmail(
+                        loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
         // Retrieve the user's role (assuming a single role per user)
         // Get RoleType directly
-        RoleType roleType = userRepository.findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail()).flatMap(user -> user.getRoles().stream()
-                        .findFirst()
-                        .map(Role::getName))
+//
+
+        RoleType roleType = user.getRoles().stream()
+                .findFirst()
+                .map(Role::getName)
                 .orElse(null);
 
         JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
+        jwtAuthResponse.setUsername(user.getUsername()); // Send the username
+        jwtAuthResponse.setUserId(user.getId()); // Send the user ID
         jwtAuthResponse.setRole(roleType);
         jwtAuthResponse.setAccessToken(token);
 

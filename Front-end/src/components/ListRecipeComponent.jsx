@@ -89,7 +89,7 @@ const ListRecipeComponent = () => {
                       Write a comment
                     </button>
                   )}
-                  <CommentComponent/>
+                  <CommentComponent recipeId={recipe.id}/>
                   
                   <button
                     type="button"
@@ -99,7 +99,7 @@ const ListRecipeComponent = () => {
                   >
                     Read comments
                   </button>
-                  <AllCommentsComponent />
+                  <AllCommentsComponent recipeId={recipe.id}/>
                 </div>
 
                 {isAuth && (

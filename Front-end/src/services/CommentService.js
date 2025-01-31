@@ -17,7 +17,28 @@ axios.interceptors.request.use(function (config) {
 
 export const getAllComments = () => axios.get(COMMENT_REST_API_BASE_URL);
 
-export const createComment = (comment, recipeId) => axios.post(COMMENT_REST_API_BASE_URL + '/recipe/' + recipeId, comment, recipeId);
+export const createComment = (comment, recipeId) => axios.post(COMMENT_REST_API_BASE_URL + '/recipe/' + recipeId, comment);
+
+// export const createComment = async (comment, recipeId) => {
+//     try {
+//       const token = getToken();
+//       if (!token) {
+//         throw new Error("No authentication token found.");
+//       }
+  
+//       const response = await axios.post(COMMENT_REST_API_BASE_URL +'/recipe/'+ recipeId, comment, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,  // Include token
+//           "Content-Type": "application/json",
+//         },
+//       });
+  
+//       return response;
+//     } catch (error) {
+//       console.error("Error creating comment:", error);
+//       throw error;
+//     }
+//   };
 
 export const getCommentById = (commentId) => axios.get(COMMENT_REST_API_BASE_URL + '/' + commentId);
 
