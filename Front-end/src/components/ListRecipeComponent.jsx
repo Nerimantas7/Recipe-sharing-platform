@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listRecipes } from "../services/RecipeService";
+import { listRecipes, deleteRecipe } from "../services/RecipeService";
 import { useNavigate } from "react-router-dom";
 import { isUserLoggedIn } from "../services/AuthService";
 import CommentComponent from "../components/CommentComponent";
@@ -85,11 +85,12 @@ const ListRecipeComponent = () => {
                     className="btn btn-outline-secondary mx-3"
                     data-bs-toggle="modal"
                     data-bs-target="#writeComment"
+                    onClick={() => setSelectedRecipeId(recipe.id)}
                   >
                       Write a comment
                     </button>
                   )}
-                  <CommentComponent recipeId={recipe.id}/>
+                  <CommentComponent recipeId={selectedRecipeId}/>
                   
                   <button
                     type="button"

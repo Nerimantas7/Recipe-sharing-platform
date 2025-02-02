@@ -72,7 +72,7 @@ const RecipeComponent = () => {
           updateRecipe(id, recipe)
             .then((response) => {
               console.log(response.data);
-              navigator(`/edit-recipe/${id}`); 
+              navigator("/"); 
             })
             .catch((error) => {
               console.error(error);
@@ -88,7 +88,7 @@ const RecipeComponent = () => {
           createRecipe(recipe)
             .then((response) => {
               console.log(response.data);
-              navigator("/add-recipe");
+              navigator("/");
             })
             .catch((error) => {
               console.error(error);
@@ -105,12 +105,20 @@ const RecipeComponent = () => {
     const errorsCopy = {};
   
     if (!recipeName.trim()) errorsCopy.recipeName = "Recipe name is required";
-    if (!recipeIngredients.trim()) errorsCopy.recipeIngredients = "Ingredients are required";
+    // if (!recipeIngredients.trim()) errorsCopy.recipeIngredients = "Ingredients are required";
+    if (!Array.isArray(recipeIngredients) || recipeIngredients.length === 0 || recipeIngredients.some(ing => !ing.trim())) {
+      errorsCopy.recipeIngredients = "At least one valid ingredient is required";
+  }
     if (!recipeSteps.trim()) errorsCopy.recipeSteps = "Steps are required";
     if (!categoryId) errorsCopy.recipeCategory = "Category is required";
-    if (!recipeImageUrl.trim() || !/^https?:\/\/.+\.(jpg|jpeg|png|gif)$/.test(recipeImageUrl)) {
+    // if (!recipeImageUrl.trim() || !/^https?:\/\/.+\.(jpg|jpeg|png|gif)$/.test(recipeImageUrl)) {
+    //   errorsCopy.recipeImageUrl = "Valid image URL is required";
+    // }
+
+    if (!recipeImageUrl.trim() || !/^https?:\/\/.+\.(jpg|jpeg|png|gif)(\?.*)?$/.test(recipeImageUrl)) {
       errorsCopy.recipeImageUrl = "Valid image URL is required";
     }
+    
   
     setErrors(errorsCopy);
     return Object.keys(errorsCopy).length === 0;
@@ -155,12 +163,12 @@ const RecipeComponent = () => {
                 <label className="form-label">Ingredients:</label>
                 <input
                   type="text"
-                  placeholder="Enter ingredients"
+                  placeholder="Enter ingredients (comma-separated)"
                   name="recipeIngredients"
-                  value={recipeIngredients}
+                  value={recipeIngredients} // Convert array to string for display
                   className={`form-control ${errors.recipeIngredients ? "is-invalid" : ""}`}
                   onChange={(e) =>
-                    setRecipeIngredients(e.target.value.split(","))
+                    setRecipeIngredients(e.target.value.split(",").map(ing => ing.trim())) // Ensure each ingredient is trimmed
                   }
                 />
                 {errors.recipeIngredients && (

@@ -41,6 +41,7 @@ public class SpringSecurityConfig {
                 .headers(headers -> headers.frameOptions().sameOrigin())
                 .authorizeHttpRequests((authorize) ->{
                     authorize.requestMatchers("/api/auth/**").permitAll();
+                    authorize.requestMatchers("/api/comments/**").permitAll();
                     authorize.requestMatchers("/api/recipes/**").permitAll();
                     authorize.requestMatchers("/api/categories/**").permitAll();
                     authorize.requestMatchers("/h2-console/**").permitAll(); // allows to achieve H2-console

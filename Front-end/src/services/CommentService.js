@@ -4,41 +4,40 @@ import { getToken } from "./AuthService";
 const COMMENT_REST_API_BASE_URL = 'http://localhost:8080/api/comments'
 
 // Add a request interceptor
-axios.interceptors.request.use(function (config) {
+// axios.interceptors.request.use(function (config) {
 
-    config.headers['Authorization'] = getToken();
+//     config.headers['Authorization'] = getToken();
 
-    return config;
+//     return config;
 
-}, function (error) {
+// }, function (error) {
 
-    return Promise.reject(error);
-});
+//     return Promise.reject(error);
+// });
+
+axios.interceptors.request.use(
+    function (config) {
+      const token = getToken();
+      if (token) {
+        console.log("Token being sent:", token); // Debugging log
+        config.headers['Authorization'] = getToken();
+      }
+      return config;
+    },
+    function (error) {
+      console.error("Request Error:", error);
+      return Promise.reject(error);
+    }
+  );
 
 export const getAllComments = () => axios.get(COMMENT_REST_API_BASE_URL);
 
-export const createComment = (comment, recipeId) => axios.post(COMMENT_REST_API_BASE_URL + '/recipe/' + recipeId, comment);
+// export const createComment = (comment, recipeId) => axios.post(COMMENT_REST_API_BASE_URL + '/recipe/' + recipeId, comment);
 
-// export const createComment = async (comment, recipeId) => {
-//     try {
-//       const token = getToken();
-//       if (!token) {
-//         throw new Error("No authentication token found.");
-//       }
-  
-//       const response = await axios.post(COMMENT_REST_API_BASE_URL +'/recipe/'+ recipeId, comment, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,  // Include token
-//           "Content-Type": "application/json",
-//         },
-//       });
-  
-//       return response;
-//     } catch (error) {
-//       console.error("Error creating comment:", error);
-//       throw error;
-//     }
-//   };
+export const createComment = (comment, recipeId) => {
+    console.log("Creating comment:", comment, "for recipeId:", recipeId); // Debugging log
+    return axios.post(`${COMMENT_REST_API_BASE_URL}/recipe/${recipeId}`, comment);
+  };
 
 export const getCommentById = (commentId) => axios.get(COMMENT_REST_API_BASE_URL + '/' + commentId);
 

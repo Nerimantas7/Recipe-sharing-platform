@@ -1,21 +1,18 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  createComment,
-  getCommentById,
-  updateComment,
-} from "../services/CommentService";
+import { createComment, getCommentById } from "../services/CommentService";
 import { getLoggedInUser } from "../services/AuthService";
 import { getRecipeId } from "../services/RecipeService";
+
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import * as bootstrap from "bootstrap";
 
 const CommentComponent = ({ recipeId }) => {
   const [recipeComment, setRecipeComment] = useState("");
   // const [recipeId, setRecipeId] = useState("recipeId");
   const [userId, setUserId] = useState("");
-  // const [userName, setUsername] = useState("");
-  // const [createdAt, setCreatedAt] = useState("");
-  // const [updatedAt, setUpdatedAt] = useState("");
+  // const [selectedRecipeId, setSelectedRecipeId] = useState(null);
 
   const { id: paramRecipeId } = useParams();
 
@@ -33,9 +30,10 @@ const CommentComponent = ({ recipeId }) => {
   }, []);
 
   const finalRecipeId = recipeId || paramRecipeId;
+  console.log("Final Recipe ID:", finalRecipeId); // Add this line to check the value
 
   // Function to save added or updated data from form
-  function saveOrUpdateComment(e) {
+  function saveComment(e) {
     e.preventDefault();
 
     if (!recipeComment.trim()) {
@@ -47,60 +45,56 @@ const CommentComponent = ({ recipeId }) => {
       alert("Error: Missing user or recipe information.");
       return;
     }
+    if (validateForm()) {
+      const comment = {
+        recipeComment,
+        recipeId: finalRecipeId, // Directly use the passed prop
+        userId,
+      };
 
-    const comment = {
-      recipeComment,
-      recipeId: finalRecipeId, // Directly use the passed prop
-      userId,
-    };
+      console.log("Comment data:", comment);
 
-    console.log("Comment data:", comment);
+      // if (window.confirm("Are you sure you want to save this comment?")) {
+        createComment(comment, finalRecipeId)
+          .then((response) => {
+            console.log("Comment created:", response.data);
+            // navigator(`/recipes/${finalRecipeId}`);
 
-    if (window.confirm("Are you sure you want to save this comment?")) {
-      createComment(comment)
-        .then((response) => {
-          console.log("Comment created:", response.data);
-          navigator(`/recipes/${finalRecipeId}`);
-        })
-        .catch((error) => {
-          console.error("Error creating comment:", error);
-          alert("Failed to create the comment.");
-        });
-    }   
+            // const modalElement = document.getElementById("writeComment");
+            // if (modalElement) {
+            //   const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            //   if (modalInstance) {
+            //     modalInstance.hide();
+            //   }
+            // }
+            
+
+            navigator("/recipes");
+          })
+          .catch((error) => {
+            console.error("Error creating comment:", error);
+            alert("Failed to create the comment.");
+          });
+      // }
+    }
   }
 
   // Function to check the form data
-  // function validateForm() {
-  //   const errorsCopy = {};
+  function validateForm() {
+    const errorsCopy = {};
 
-  //   if (!recipeComment.trim()) {
-  //     errorsCopy.recipeComment = "Comment is required";
-  //   }
-  //   setErrors(errorsCopy);
-  //   return Object.keys(errorsCopy).length === 0;
-  // }
+    if (!recipeComment.trim()) {
+      errorsCopy.recipeComment = "Comment is required";
+    }
+    setErrors(errorsCopy);
+    return Object.keys(errorsCopy).length === 0;
+  }
 
   const handleCancel = () => {
     setRecipeComment("");
     setErrors({});
     navigator("/recipes");
   };
-
-  function pageTitle() {
-    if (recipeId) {
-      return (
-        <h5 className="modal-title" id="staticBackdropLabel">
-          Update Comment
-        </h5>
-      );
-    } else {
-      return (
-        <h5 className="modal-title" id="staticBackdropLabel">
-          Add Comment
-        </h5>
-      );
-    }
-  }
 
   return (
     <div
@@ -115,10 +109,10 @@ const CommentComponent = ({ recipeId }) => {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            {/* <h5 className="modal-title" id="staticBackdropLabel">
+            <h5 className="modal-title" id="staticBackdropLabel">
               Write a comment
-            </h5> */}
-            {pageTitle()}
+            </h5>
+            {/* {pageTitle()} */}
             <button
               type="button"
               className="btn-close"
@@ -156,7 +150,7 @@ const CommentComponent = ({ recipeId }) => {
             <button
               type="button"
               className="btn btn-primary"
-              onClick={(e) => saveOrUpdateComment(e)}
+              onClick={(e) => saveComment(e)}
             >
               Submit
             </button>

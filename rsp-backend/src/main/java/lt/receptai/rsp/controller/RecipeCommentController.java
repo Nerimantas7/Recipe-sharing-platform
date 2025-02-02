@@ -61,7 +61,7 @@ public class RecipeCommentController {
 
         // Map saved RecipeComment back to RecipeCommentDto
         RecipeCommentDto responseDto = modelMapper.map(savedComment, RecipeCommentDto.class);
-
+        System.out.println("Comment added successfully: " + savedComment.getRecipeComment());
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
