@@ -68,7 +68,7 @@ const CommentComponent = ({ recipeId }) => {
             //   }
             // }
             
-
+            setRecipeComment("");
             navigator("/recipes");
           })
           .catch((error) => {
@@ -150,6 +150,7 @@ const CommentComponent = ({ recipeId }) => {
             <button
               type="button"
               className="btn btn-primary"
+              data-bs-dismiss="modal"
               onClick={(e) => saveComment(e)}
             >
               Submit
