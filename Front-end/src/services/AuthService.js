@@ -97,3 +97,14 @@ export const isAdminUser = () => {
   return user?.role === "ROLE_ADMIN"; // Optional chaining
 };
 
+export const getUsername = async(userId)=>{
+  try{
+    const response = await axios.get(`http://localhost:8080/api/comments/user/${userId}/username`);
+    console.log("User name: ", response);
+    return response.data; //this is the username
+  } catch(error){
+    console.error("Error fetching username: ", error);
+    return null;
+  }
+};
+

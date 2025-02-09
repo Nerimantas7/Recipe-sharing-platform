@@ -53,7 +53,7 @@ const ListRecipeComponent = () => {
     }
   };  
 
-  const refreshComments = () => {
+  const refreshRecipes = () => {
     fetchRecipes(); // Refresh the recipes list
   };
 
@@ -97,10 +97,11 @@ const ListRecipeComponent = () => {
                     className="btn btn-outline-secondary mx-3"
                     data-bs-toggle="modal"
                     data-bs-target="#readComments"
+                    onClick={() => setSelectedRecipeId(recipe.id)}
                   >
                     Read comments
                   </button>
-                  <AllCommentsComponent recipeId={recipe.id}/>
+                  <AllCommentsComponent recipeId={selectedRecipeId}/>
                 </div>
 
                 {isAuth && (

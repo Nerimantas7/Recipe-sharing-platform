@@ -104,4 +104,13 @@ public class RecipeCommentController {
         return ResponseEntity.ok("Comment deleted successfully!");
     }
 
+    // Get username by userId
+    @GetMapping("/user/{userId}/username")
+    public ResponseEntity<String> getUsernameByUserId(@PathVariable Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
+
+        return ResponseEntity.ok(user.getUsername());
+    }
+
 }

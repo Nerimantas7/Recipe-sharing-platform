@@ -55,26 +55,26 @@ const CommentComponent = ({ recipeId }) => {
       console.log("Comment data:", comment);
 
       // if (window.confirm("Are you sure you want to save this comment?")) {
-        createComment(comment, finalRecipeId)
-          .then((response) => {
-            console.log("Comment created:", response.data);
-            // navigator(`/recipes/${finalRecipeId}`);
+      createComment(comment, finalRecipeId)
+        .then((response) => {
+          console.log("Comment created:", response.data);
+          // navigator(`/recipes/${finalRecipeId}`);
 
-            // const modalElement = document.getElementById("writeComment");
-            // if (modalElement) {
-            //   const modalInstance = bootstrap.Modal.getInstance(modalElement);
-            //   if (modalInstance) {
-            //     modalInstance.hide();
-            //   }
-            // }
-            
-            setRecipeComment("");
-            navigator("/recipes");
-          })
-          .catch((error) => {
-            console.error("Error creating comment:", error);
-            alert("Failed to create the comment.");
-          });
+          // const modalElement = document.getElementById("writeComment");
+          // if (modalElement) {
+          //   const modalInstance = bootstrap.Modal.getInstance(modalElement);
+          //   if (modalInstance) {
+          //     modalInstance.hide();
+          //   }
+          // }
+
+          setRecipeComment("");
+          navigator("/recipes");
+        })
+        .catch((error) => {
+          console.error("Error creating comment:", error);
+          alert("Failed to create the comment.");
+        });
       // }
     }
   }
@@ -126,11 +126,11 @@ const CommentComponent = ({ recipeId }) => {
             <label for="recipient-name" class="col-form-label">Recipient:</label>
             <input type="text" class="form-control" id="recipient-name"/>
           </div> */}
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label htmlFor="message-text" className="col-form-label">
                   Comment:
                 </label>
-                {/* <textarea className="form-control" id="message-text"></textarea> */}
+               
                 <input
                   id="commentInput"
                   type="text"
@@ -143,6 +143,18 @@ const CommentComponent = ({ recipeId }) => {
                 {errors.recipeComment && (
                   <div className="invalid-feedback">{errors.recipeComment}</div>
                 )}
+              </div> */}
+
+              <div className="form-floating">
+                <textarea
+                  className="form-control"
+                  placeholder="Leave a comment here"
+                  value={recipeComment}
+                  id="floatingTextarea2"
+                  style={{ height: "100px" }}
+                  onChange={(e) => setRecipeComment(e.target.value)}
+                ></textarea>
+                <label htmlFor="floatingTextarea2">Comments</label>
               </div>
             </form>
           </div>
