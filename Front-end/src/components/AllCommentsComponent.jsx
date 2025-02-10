@@ -21,21 +21,48 @@ const AllCommentsComponent = ({ recipeId }) => {
     }
   }, [finalRecipeId]);
 
+  function fetchComments(finalRecipeId) {
+    getCommentsByRecipeId(finalRecipeId)
+      .then((response) => {
+        console.log("Fetched comments: ", response.data);
+        // setComments(response.data);
+  
+        // Fetch usernames for all comments
+        Promise.all(
+          response.data.map((comment) =>
+            getUsername(comment.userId).then((username) => ({
+              ...comment,
+              userName: username || "Unknown",
+            }))
+          )
+        )
+          .then((commentsWithUsernames) => {
+            console.log("Comments with usernames: ", commentsWithUsernames);
+            setComments(commentsWithUsernames); // Update comments with usernames
+          })
+          .catch((error) => {
+            console.error("Error fetching usernames:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error fetching comments:", error);
+      });
+  }
   
 
-  function fetchComments (finalRecipeId) {
+//   function fetchComments (finalRecipeId) {
     
-      getCommentsByRecipeId(finalRecipeId)
-      .then((response) =>{
-        console.log("Fetched comments: ", response.data);
-        setComments(response.data);
-        const username = getUsername(response.data.userId);
-        console.log("User name: ", username);
-      })     
-    .catch ((error) =>{
-      console.error("Error fetching comments:", error);
-    });
-  };
+//       getCommentsByRecipeId(finalRecipeId)
+//       .then((response) =>{
+//         console.log("Fetched comments: ", response.data);
+//         setComments(response.data);
+//         const username = getUsername(response.data.userId);
+//         console.log("User name: ", username);
+//       })     
+//     .catch ((error) =>{
+//       console.error("Error fetching comments:", error);
+//     });
+//   };
 
   // const fetchComments = async (finalRecipeId) => {
   //   try {
@@ -92,16 +119,16 @@ const AllCommentsComponent = ({ recipeId }) => {
             ></button>
           </div>
           <div className="modal-body">
-            {comments.map((comment, index) => (
-              <div key={index} className="comment-item">
+            {comments.map((comment) => (
+              <div key={comment.id} className="comment-item">
                 <div>
                   <p className="comment-text">{comment.recipeComment}</p>
                 </div>
                 <div>
-                  <p>By:{usernames[index]}</p>
+                  <p>By:{comment.userName}</p>
                 </div>
                 <div>
-                  <p>Date:{comment.commentDate}</p>
+                  <p>Date:{comment.createdAt}</p>
                 </div>
               </div>
             ))}

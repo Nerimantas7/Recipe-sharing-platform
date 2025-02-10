@@ -58,16 +58,6 @@ const CommentComponent = ({ recipeId }) => {
       createComment(comment, finalRecipeId)
         .then((response) => {
           console.log("Comment created:", response.data);
-          // navigator(`/recipes/${finalRecipeId}`);
-
-          // const modalElement = document.getElementById("writeComment");
-          // if (modalElement) {
-          //   const modalInstance = bootstrap.Modal.getInstance(modalElement);
-          //   if (modalInstance) {
-          //     modalInstance.hide();
-          //   }
-          // }
-
           setRecipeComment("");
           navigator("/recipes");
         })
