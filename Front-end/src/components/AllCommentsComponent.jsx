@@ -48,48 +48,6 @@ const AllCommentsComponent = ({ recipeId }) => {
         console.error("Error fetching comments:", error);
       });
   }
-  
-
-//   function fetchComments (finalRecipeId) {
-    
-//       getCommentsByRecipeId(finalRecipeId)
-//       .then((response) =>{
-//         console.log("Fetched comments: ", response.data);
-//         setComments(response.data);
-//         const username = getUsername(response.data.userId);
-//         console.log("User name: ", username);
-//       })     
-//     .catch ((error) =>{
-//       console.error("Error fetching comments:", error);
-//     });
-//   };
-
-  // const fetchComments = async (finalRecipeId) => {
-  //   try {
-  //     // Step 1: Fetch comments for the given recipe
-  //     const response = await getCommentsByRecipeId(finalRecipeId);
-  //     const commentsData = response.data;
-  
-  //     console.log("Fetched comments: ", commentsData);
-  
-  //     // Step 2: Fetch usernames for each comment asynchronously
-  //     const usernamesData = await Promise.all(
-  //       commentsData.map(async (comment) => {
-  //         const username = await getUsername(comment.userId);
-  //         return username || "Unknown"; // Handle potential errors
-  //       })
-  //     );
-  
-  //     console.log("Usernames for comments: ", usernamesData);
-  //     return setUsernames(usernamesData); // Returns an array of usernames
-  //   } catch (error) {
-  //     console.error("Error fetching usernames:", error);
-  //     setComments([]);
-  //     setUsernames([])
-  //   }
-  // };
-  
-  
 
   const refreshComments = () => {
     fetchComments(); // Refresh the comments list
@@ -118,17 +76,15 @@ const AllCommentsComponent = ({ recipeId }) => {
               aria-label="Close"
             ></button>
           </div>
-          <div className="modal-body">
+          <div className="modal-body ">
             {comments.map((comment) => (
-              <div key={comment.id} className="comment-item">
+              <div key={comment.id} className="comment-item bg-light border shadow p-3 mb-3 bg-body rounded ">
                 <div>
                   <p className="comment-text">{comment.recipeComment}</p>
                 </div>
-                <div>
-                  <p>By:{comment.userName}</p>
-                </div>
-                <div>
-                  <p>Date:{comment.createdAt}</p>
+                <div className="d-flex justify-content-between  ">
+                  <p className="mr-auto mb-0"><small>By: </small><em>{comment.userName}</em></p>                
+                  <p className="text-end mb-0"><small>Date: {comment.createdAt}</small></p>
                 </div>
               </div>
             ))}
@@ -142,7 +98,7 @@ const AllCommentsComponent = ({ recipeId }) => {
               className="btn btn-secondary"
               data-bs-dismiss="modal"
             >
-              Close
+              Close 
             </button>
           </div>
         </div>

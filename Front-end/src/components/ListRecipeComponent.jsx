@@ -94,12 +94,12 @@ const ListRecipeComponent = () => {
                   
                   <button
                     type="button"
-                    className="btn btn-outline-secondary mx-3"
+                    className="btn btn-outline-secondary mx-3 position-relative"
                     data-bs-toggle="modal"
                     data-bs-target="#readComments"
                     onClick={() => setSelectedRecipeId(recipe.id)}
                   >
-                    Read comments
+                    Read comments <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">4</span>
                   </button>
                   <AllCommentsComponent recipeId={selectedRecipeId}/>
                 </div>
