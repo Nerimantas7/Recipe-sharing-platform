@@ -47,6 +47,10 @@ public class Recipe {
     @JoinColumn(name = "category_id", nullable = false)
     private RecipeCategory recipeCategory;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<RecipeComment> recipeComments = new ArrayList<>(); // Collection of comments
 

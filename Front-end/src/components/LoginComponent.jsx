@@ -52,7 +52,7 @@ const LoginComponent = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container" style={{ marginTop: "100px" }}>
       <div className="row">
         <div className="col-md-6 offset-md-3 mt-4">
           <div className="card">

@@ -9,9 +9,9 @@ import ListCategoriesComponent from "./components/ListCategoriesComponent";
 import RegisterComponent from "./components/RegisterComponent";
 import LoginComponent from "./components/LoginComponent";
 import { isUserLoggedIn } from "./services/AuthService";
+import MyRecipesComponent from "./components/MyRecipesComponent";
 
 function App() {
-
   function AuthenticatedRoute({ children }) {
     const isAuth = isUserLoggedIn();
 
@@ -34,6 +34,17 @@ function App() {
 
           {/* http://localhost:5173/recipes - pakeisti porta*/}
           <Route path="/recipes" element={<ListRecipeComponent />}></Route>
+
+          {/* http://localhost:5173/my-recipes - pakeisti porta*/}
+          <Route
+            path="/my-recipes"
+            element={
+              <AuthenticatedRoute>
+                <MyRecipesComponent />
+              </AuthenticatedRoute>
+            }
+          ></Route>
+
           {/* http://localhost:5173/add-recipe - pakeisti porta*/}
           <Route
             path="/add-recipe"
@@ -69,7 +80,7 @@ function App() {
           ></Route>
           {/* http://localhost:5173/edit-category/1 - pakeisti porta*/}
           <Route
-            path='/edit-category/:id'
+            path="/edit-category/:id"
             element={
               <AuthenticatedRoute>
                 <CategoryComponent />
@@ -81,7 +92,6 @@ function App() {
 
           {/* http://localhost:5173/login - pakeisti porta*/}
           <Route path="/login" element={<LoginComponent />}></Route>
-
         </Routes>
         <FooterComponent />
       </BrowserRouter>

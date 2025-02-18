@@ -17,7 +17,7 @@ const Header = () => {
 
   return (
     <div>
-      <header className="header">
+      <header className="header fixed-top">
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
             <a className="navbar-brand" href="/">
@@ -41,6 +41,14 @@ const Header = () => {
                     Home
                   </a>
                 </li>
+
+                {isAuth && (
+                  <li className="nav-item">
+                    <a className="nav-link" href="/my-recipes">
+                      My recipes
+                    </a>
+                  </li>
+                )}
 
                 {isAuth && (
                   <li className="nav-item">

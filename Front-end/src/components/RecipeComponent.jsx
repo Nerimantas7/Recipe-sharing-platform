@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createRecipe, getRecipe, updateRecipe } from "../services/RecipeService";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAllCategories } from "../services/CategoryService";
+import { getLoggedInUser } from "../services/AuthService";
 
 const RecipeComponent = () => {
   const [recipeName, setRecipeName] = useState("");
@@ -10,6 +11,7 @@ const RecipeComponent = () => {
   const [recipeImageUrl, setRecipeImageUrl] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [categories, setCategories] = useState([]);
+  const [userId, setUserId] = useState("");
 
   const { id } = useParams();
 
@@ -19,9 +21,16 @@ const RecipeComponent = () => {
     recipeIngredients: "",
     recipeImageUrl: "",
     recipeSteps: "",
+    userId: ""
   });
 
   const navigator = useNavigate();
+  useEffect(() => {
+      const loggedInUser = getLoggedInUser();
+      if (loggedInUser) {
+        setUserId(loggedInUser.userId);
+      }
+    }, []);
 
   useEffect(() => {
     if (id) {
@@ -34,6 +43,7 @@ const RecipeComponent = () => {
           setRecipeSteps(recipe.recipeSteps);
           setRecipeImageUrl(recipe.recipeImageUrl);
           setCategoryId(recipe.categoryId);
+          setUserId(recipe.userId);
         })
         .catch((error) => {
           console.error(error);
@@ -62,6 +72,7 @@ const RecipeComponent = () => {
         recipeSteps,
         recipeImageUrl,
         categoryId,
+        userId,
       };
 
       if (id) {
@@ -105,25 +116,21 @@ const RecipeComponent = () => {
     const errorsCopy = {};
   
     if (!recipeName.trim()) errorsCopy.recipeName = "Recipe name is required";
-    // if (!recipeIngredients.trim()) errorsCopy.recipeIngredients = "Ingredients are required";
+    
     if (!Array.isArray(recipeIngredients) || recipeIngredients.length === 0 || recipeIngredients.some(ing => !ing.trim())) {
       errorsCopy.recipeIngredients = "At least one valid ingredient is required";
   }
     if (!recipeSteps.trim()) errorsCopy.recipeSteps = "Steps are required";
+    
     if (!categoryId) errorsCopy.recipeCategory = "Category is required";
-    // if (!recipeImageUrl.trim() || !/^https?:\/\/.+\.(jpg|jpeg|png|gif)$/.test(recipeImageUrl)) {
-    //   errorsCopy.recipeImageUrl = "Valid image URL is required";
-    // }
-
+    
     if (!recipeImageUrl.trim() || !/^https?:\/\/.+\.(jpg|jpeg|png|gif)(\?.*)?$/.test(recipeImageUrl)) {
       errorsCopy.recipeImageUrl = "Valid image URL is required";
-    }
-    
+    }    
   
     setErrors(errorsCopy);
     return Object.keys(errorsCopy).length === 0;
-  }
-  
+  }  
 
   const handleCancel = () => {
     navigator("/recipes");
@@ -138,7 +145,7 @@ const RecipeComponent = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container" style={{ marginTop: "100px" }}>
       <div className="row">
         <div className="card col-md-6 offset-md-3 offset-md-3 mt-4">
           {pageTitle()}

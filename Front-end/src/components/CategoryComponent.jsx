@@ -74,7 +74,7 @@ const CategoryComponent = () => {
   }
 
   return (
-    <div className="container my-4">
+    <div className="container my-4" style={{ marginTop: "100px" }}>
       <div className="row">
         <div className="card col-md-6 offset-md-3 offset-md-3">
           {pageTitle()}

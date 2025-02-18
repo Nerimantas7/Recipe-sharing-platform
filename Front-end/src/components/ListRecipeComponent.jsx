@@ -58,14 +58,14 @@ const ListRecipeComponent = () => {
   };
 
   return (
-    <div>
+    <div style={{ marginTop: "100px" }}>
       <div className="row row-cols-1 row-cols-md-3 g-1 mx-4 my-3">
         {recipes.map(
           (recipe) => (
             <div
               key={recipe.id}
               className="card mb-3 mx-auto"
-              style={{ maxWidth: "450px" }}
+              style={{ width: "25rem" }}
             >              
               <img
                 src={recipe.recipeImageUrl}
@@ -74,6 +74,7 @@ const ListRecipeComponent = () => {
               />             
               <div className="col-md-12">
                 <div className="card-body">
+                <p className="card-text">Author: {recipe.userId}</p>
                   <h5 className="card-title">{recipe.recipeName}</h5>
                   <p className="card-text">{recipe.recipeIngredients}</p>
                   <p className="card-text">{recipe.recipeSteps}</p>
@@ -104,7 +105,7 @@ const ListRecipeComponent = () => {
                   <AllCommentsComponent recipeId={selectedRecipeId}/>
                 </div>
 
-                {isAuth && (
+                {/* {isAuth && (
                   <div className="card-footer">
                     <button
                       type="button"
@@ -121,7 +122,7 @@ const ListRecipeComponent = () => {
                       Delete
                     </button>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           )          

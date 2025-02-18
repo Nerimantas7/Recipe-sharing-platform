@@ -49,7 +49,7 @@ const ListCategoriesComponent = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container" style={{ marginTop: "100px" }}>
       <h2 className="text-center my-4">List of Categories</h2>
 
       {isAdmin && (
