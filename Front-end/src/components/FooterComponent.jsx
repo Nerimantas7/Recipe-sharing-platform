@@ -15,6 +15,14 @@ const FooterComponent = () => {
               Home
             </a>
           </li>
+
+          {isAuth && (
+            <li className="nav-item">
+              <a href="/my-recipes" className="nav-link px-2 text-muted">
+                My recipes
+              </a>
+            </li>
+          )}
           {isAuth && (
             <li className="nav-item">
               <a href="/add-recipe" className="nav-link px-2 text-muted">
