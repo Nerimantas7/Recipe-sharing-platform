@@ -41,7 +41,7 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setRecipeCategory(category);
 
         //Recipe Jpa entity
-        Recipe savedRecipe = recipeRepository.save(recipe);
+       Recipe savedRecipe = recipeRepository.save(recipe);
 
         //Convert saved Recipe Jpa entity object into RecipeDto entity
 
