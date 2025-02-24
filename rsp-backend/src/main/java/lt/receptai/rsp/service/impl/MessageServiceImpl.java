@@ -1,5 +1,6 @@
 package lt.receptai.rsp.service.impl;
 
+import lombok.AllArgsConstructor;
 import lt.receptai.rsp.dto.MessageDto;
 import lt.receptai.rsp.entity.Message;
 import lt.receptai.rsp.entity.User;
@@ -7,7 +8,10 @@ import lt.receptai.rsp.repository.MessageRepository;
 import lt.receptai.rsp.repository.UserRepository;
 import lt.receptai.rsp.service.MessageService;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
+@Service
+@AllArgsConstructor
 public class MessageServiceImpl implements MessageService {
 
     private MessageRepository messageRepository;

@@ -133,7 +133,7 @@ const RecipeComponent = () => {
   }  
 
   const handleCancel = () => {
-    navigator("/recipes");
+    navigator("/my-recipes");
   };
 
   function pageTitle() {
